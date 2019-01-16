@@ -8,6 +8,7 @@
 </div>
 
 <form action="{{ url_for('company_create') }}" method="POST">
+
     <input type="hidden" name="action" value="{{ action }}">
     <input type="hidden" name="id" value="{{ company._id }}">
     <div class="container-fluid">
@@ -70,8 +71,8 @@
 
         <div class="row no-gutters mt-2">
             <div class="col-md-12 text-right">
-                <button type="submit" name = "cancel" class="btn-primary btn-lg mr-2">Cancel</button>
-                <button type="submit" name = "submit" class="btn-primary btn-lg">Submit</button>
+                <button type="submit" name="cancel" class="btn-primary btn-lg mr-2">Cancel</button>
+                <button type="submit" name="submit" class="btn-primary btn-lg">Submit</button>
             </div>
         </div>
 

@@ -13,8 +13,6 @@ def company_create():
     if 'cancel' in request.form:
         return redirect(url_for('company_list'))
     
-    #pdb.set_trace()
-
     company = {}
     if request.method == 'GET':
         return render_template('site/company.html',company=company,action='create')
@@ -33,7 +31,7 @@ def company_create():
         company['_id'] = next_sequence('company')    
         db.company.insert(company)
     else:
-        db.company.update(company)
+        db.company.update({'_id': request.form['id']}, company)
 
     return redirect(url_for('company_list'))
 
@@ -41,7 +39,7 @@ def company_create():
 def company_edit(company_id):
 
     if request.method == 'GET':
-        company = db.company.find({'_id': company_id})
+        company = db.company.find_one({'_id': company_id})
         return render_template('site/company.html',company=company,action='edit')
 
     company = {}
