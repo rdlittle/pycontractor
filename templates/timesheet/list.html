@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Timesheet Listing</h2>
+<a href="{{ url_for('timesheet_entry')}}">Add</a>
+{% for item in items %}
+<div class="row">
+    <div class="col-md-1">
+        {{ item.date.strftime('%m/%d/%Y') }}
+    </div>
+    <div class="col-md-8">
+        {{ item.description }}
+    </div>
+    <div class="col-md-1">
+        {{ item.hours }}
+    </div>
+    <div class="col-md-1">
+        <a href="{{ url_for('timesheet_edit',inv_id=item.invoice,tsid=item._id) }}">Edit</a>
+    </div>
+    <div class="col-md-1">
+        <a href="{{ url_for('timesheet_delete',inv_id=item.invoice,tsid=item._id) }}">Delete</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

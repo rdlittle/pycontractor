@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row no-gutters">
+    <div class="col-md-8">
+        <h2>Invoice Listing</h2>
+    </div>
+    <div class="col-md-4 text-right">
+        <a href="{{ url_for('invoice_create')}}">
+            <h2>New invoice</h2>
+        </a>
+    </div>
+</div>
+
+{% for item in items %}
+<div class="row">
+    <div class="col-md-1">
+        {{ item._id }}
+    </div>
+    <div class="col-md-1">
+        {{ item.date.strftime('%m/%d/%Y') }}
+    </div>
+    <div class="col-md-1">
+        {{ item.client }}
+    </div>
+    <div class="col-md-1 number">
+        {{ item.hours }}
+    </div>
+    <div class="col-md-1 number">
+        {{ '%5.2f'|format(item.amount) }}
+    </div>
+    <div class="col-md-1">
+        {{ item.status }}
+    </div>
+    <div class="col-md-1">
+        {{ item.check_number }}
+    </div>
+    <div class="col-md-1">
+        <a href="{{ url_for('invoice_edit',invoice_id=item._id) }}">Edit</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

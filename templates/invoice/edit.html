@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row no-gutters">
+    <div class="col-md-11">
+        <h2>Invoice Edit</h2>
+    </div>
+    <div class="col-md-1 text-right">
+        <h2><a href="{{ url_for('timesheet_entry',invoice_id=invoice._id) }}">+</a></h2>
+    </div>
+</div>
+
+<div class="row no-gutters">
+    <div class="col-md-1 alert-primary">{{ invoice.date.strftime('%m/%d/%Y') }}</div>
+    <div class="col-md-8 alert-primary">Invoice: {{ invoice._id }}</div>
+    <div class="col-md-2 alert-primary">Status: {{ invoice.status }}</div>
+    <div class="col-md-1 alert-primary text-right">Hours: {{ invoice.hours }}</div>
+</div>
+
+{% for ts in invoice.detail %}
+<div class="row no-gutters">
+    <div class="col-md-1 text-left">
+        {{ ts.date|oconv_date }}
+    </div>
+    <div class="col-md-10 text-left">
+        <a href="{{ url_for('timesheet_edit',inv_id=invoice._id,tsid=ts._id) }}">{{ ts.description }}</a>
+    </div>
+    <div class="col-md-1 text-right">
+        {{ ts.hours}}
+    </div>
+</div>
+{% endfor %}
+
+{% if invoice.status == 'open' %}
+<div class="row no-gutters mt-2">
+    <a href="{{ url_for('invoice_close', invoice_id=invoice._id)}}">Close this invoice</a>
+</div>
+{% endif %}
+
+{% endblock %}

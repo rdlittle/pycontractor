@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row no-gutters">
+    <div class="col-md-11">
+        <h2>Company Listing</h2>
+    </div>
+</div>
+
+{% for item in items %}
+<div class="row no-gutters">
+    <div class="col-md-1">{{ item._id }}</div>
+    <div class="col-md-6">
+        <a href="{{ url_for('company_edit',company_id=item._id) }}">{{ item.name }}</a>
+    </div>
+</div>
+{% endfor %}
+
+<form action="{{ url_for('company_create') }}" method="GET">
+    <div class="row no-gutters mt-4">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn-primary btn-lg">Add Company</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

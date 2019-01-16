@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Timesheet Entry Form{% endblock %}
+
+{% block content %}
+<h2>Timesheet Entry</h2>
+<div class="container-fluid">
+    <form action="{{ url_for('timesheet_create', invoice_id=invoice_id) }}" method='POST'>
+        <div class="row no-gutters">
+            <div class="col-md-2 pl-1 pt-1 alert-primary rounded-top">
+                <span>Date</span>
+            </div>
+            <div class="col-md-1 mr-4">
+                <input type="text" size="7" id="datepicker" name="date">
+            </div>
+            <div class="col-md-1 ml-4 pl-1 pt-1 alert-primary rounded-top">
+                <span>Hours</span>
+            </div>
+            <div class="col-md-1">
+                <input type="text" size="1" name="hours">
+            </div>
+        </div>
+        <div class="row no-gutters">
+            <div class="col-md-8 mt-2 pl-1 pt-1 pb-1 alert-info rounded-right rounded-bottom">
+                <span>Work Done</span>
+            </div>
+        </div>
+        <div class="row no-gutters">
+            <div class="col-md-8">
+                <textarea name="description" rows="10" class="textBox"></textarea>
+            </div>
+        </div>
+        <button type="submit" name="submit_button" class="btn btn-primary">Submit</button>
+        <button type="submit" name="cancel_button" class="btn btn-secondary">Cancel</button>
+    </form>
+</div>
+{% endblock %}

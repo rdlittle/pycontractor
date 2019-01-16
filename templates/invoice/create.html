@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Invoice Create</h2>
+<form action="{{ url_for('invoice_create') }}" method='POST'>
+    <div class="row no-gutters">
+        <div class="col-md-1">Start Date</div>
+        <div class="col-md-2">
+            <input type="text" size="7" id="datepicker" name="date">
+        </div>
+        <div class="col-md-1">Client</div>
+        <div class="col-md-6">
+            <select class="form-control" id="client_id" name="client_id">
+                <option value="1">Market America</option>
+                <option value="2">Archway Services</option>
+            </select>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-1">
+            <input type="submit" name="submit" value="OK">
+        </div>
+        <div class="col-md-1">
+            <input type="submit" name="cancel" value="Cancel">
+        </div>
+    </div>
+</form>
+{% endblock %}
