@@ -1,7 +1,8 @@
-from contractor import app, client, db, next_sequence
+from contractor import app, db, next_sequence
 from flask import redirect, render_template, url_for, session, request
 import pdb
 from pymongo import ASCENDING
+from contractor.site.form import ContactForm
 
 @app.route('/company_list')
 def company_list():
@@ -55,3 +56,51 @@ def company_edit(company_id):
     company['email'] = request.form['email']
     db.company.update(company)
     return redirect(url_for('company_list'))
+
+@app.route('/client_create', methods=['POST'])
+def client_create():
+    form = ContactForm()
+    form.client_id = -1
+    return render_template('/site/contact.html', headline='Client Info', form=form)
+
+@app.route('/client_edit/<client_id>', methods=('GET', 'POST'))
+def client_edit(client_id=None):
+    form = ContactForm()
+    pdb.set_trace()
+    if request.method == 'GET' and client_id != -1:
+        cust = db.client.find_one({'_id': client_id})
+        form.client_id = cust['_id']
+        form.name = cust['name']
+        form.address1 = cust['address1']
+        form.address2 = cust['address2']
+        form.city = cust['city']
+        form.state = cust['state']
+        form.zipCode = cust['zip']
+        form.attn = cust['attn']
+        form.phone = cust['phone']
+        form.email = cust['email']
+        render_template('/site/contact.html', headline='Client Info',form=form)    
+    
+    cust = {}
+    cust['_id'] = form.client_id
+    cust['name'] = form.name
+    cust['address1'] = form.address1
+    cust['address2'] = form.address2
+    cust['city'] = form.city
+    cust['state'] = form.state
+    cust['zip'] = form.zipCode
+    cust['attn'] = form.attn
+    cust['phone'] = form.phone
+    cust['email'] = form.email
+    if client_id == -1:
+        cust['_id'] = next_sequence('client')
+        db.client.insert(cust)
+        return "Client added"
+
+    db.clients.update(cust)
+    return "Client updated"
+
+@app.route('/client_list')
+def client_list():
+    clients = db.clients.find().sort('name', ASCENDING)
+    return render_template('/site/client_list.html', items=clients)
