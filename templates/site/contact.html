@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row no-gutters">
+    <div class="col-md-11">
+        <h2>{{ headline }}</h2>
+    </div>
+</div>
+
+<div class="row no-gutters">
+    <form action="{{ url_for('client_edit',client_id=form.client_id) }}" method="POST" role="form">
+        <div class="col-md-10 alert-primary">
+            <div class="form-group">
+                {{ form.name.label }}
+                {{ form.name|safe }}
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row no-gutters">
+    <div class="col-md-11">
+        <h2>Client Listing</h2>
+    </div>
+</div>
+
+{% for item in items %}
+<div class="row no-gutters">
+    <div class="col-md-1 col-offset-3">{{ item._id }}</div>
+    <div class="col-md-6">
+        <a href="{{ url_for('client_edit',client_id=item._id) }}">{{ item.name }}</a>
+    </div>
+</div>
+{% endfor %}
+
+<form action="{{ url_for('client_create') }}" method="POST">
+    <div class="row no-gutters mt-4">
+        <div class="col-md-12 text-right">
+            <button type="submit" class="btn-primary btn-lg">Add Client</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
