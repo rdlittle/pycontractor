@@ -98,6 +98,22 @@ def client_edit(client_id=None):
 
     return redirect(url_for('client_list'))
 
+@app.route('/client_view/<int:client_id>', methods=['GET'])
+def client_view(client_id):
+    form = ContactForm()
+    cl = db.clients.find_one({'_id': client_id})
+    form['client_id'] = client_id
+    form['cname'] = cl.name
+    form['address1'] = cl.address1
+    form['address2'] = cl.address2
+    form['city'] = cl.city
+    form['state'] = cl.state
+    form['zip_code'] = cl.zip
+    form['phone'] = cl.phone
+    form['email'] = cl.email
+    form['attn'] = cl.attn
+    return render_template('site/client_view.html', headline="Client View", form=form)
+
 @app.route('/client_list')
 def client_list():
     clients = db.clients.find().sort('name', ASCENDING)

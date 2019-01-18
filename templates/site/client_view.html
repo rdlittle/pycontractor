@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row no-gutters">
+    <div class="col-md-11">
+        <h2>{{ headline }}</h2>
+    </div>
+</div>
+
+<form action="{{ url_for('client_edit',client_id=form.client_id) }}" method="POST">
+    <input type="hidden" name="action" value="{{ action }}">
+    <input type="hidden" name="id" value="{{ form._id }}">
+    <div class="container-fluid">
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">form name</div>
+            <div class="col-md-10">
+                <input type="text" name="name" value="{{ form.cname }}" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">Address 1</div>
+            <div class="col-md-10">
+                <input type="text" name="address1" value="{{ form.address1 }}" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">Address 2</div>
+            <div class="col-md-5">
+                <input type="text" name="address2" value="{{ form.address2 }}" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">City</div>
+            <div class="col-md-3">
+                <input type="text" name="city" value="{{ form.city }}" style="width: 100%;">
+            </div>
+            <div class="col-md-1 mr-2 text-right">State</div>
+            <div class="col-md-1">
+                <input type="text" name="state" value="{{ form.state }}" style="width: 100%;">
+            </div>
+            <div class="col-md-1 text-right mr-2">Zip</div>
+            <div class="col-md-1">
+                <input type="text" name="zip_code" value="{{ form.zip }}" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">Phone</div>
+            <div class="col-md-4">
+                <input type="text" name="phone" value="{{ form.phone }}" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">Attention</div>
+            <div class="col-md-5">
+                <input type="text" name="attn" value="{{ form.attn }}" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">Email</div>
+            <div class="col-md-5">
+                <input type="text" name="email" value="{{ form.email }}" style="width: 100%;">
+            </div>
+        </div>
+
+        <div class="row no-gutters mt-2">
+            <div class="col-md-12 text-right">
+                <button type="submit" name="cancel" class="btn-primary btn-lg mr-2">Cancel</button>
+                <button type="submit" name="submit" class="btn-primary btn-lg">Submit</button>
+            </div>
+        </div>
+
+    </div>
+    
+</form>
+
+{% endblock %}
