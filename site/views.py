@@ -61,44 +61,42 @@ def company_edit(company_id):
 def client_create():
     form = ContactForm()
     form.client_id = -1
-    return render_template('/site/contact.html', headline='Client Info', form=form)
-
-@app.route('/client_edit/<client_id>', methods=('GET', 'POST'))
-def client_edit(client_id=None):
-    form = ContactForm()
-    pdb.set_trace()
-    if request.method == 'GET' and client_id != -1:
-        cust = db.client.find_one({'_id': client_id})
-        form.client_id = cust['_id']
-        form.name = cust['name']
-        form.address1 = cust['address1']
-        form.address2 = cust['address2']
-        form.city = cust['city']
-        form.state = cust['state']
-        form.zipCode = cust['zip']
-        form.attn = cust['attn']
-        form.phone = cust['phone']
-        form.email = cust['email']
-        render_template('/site/contact.html', headline='Client Info',form=form)    
-    
     cust = {}
-    cust['_id'] = form.client_id
-    cust['name'] = form.name
-    cust['address1'] = form.address1
-    cust['address2'] = form.address2
-    cust['city'] = form.city
-    cust['state'] = form.state
-    cust['zip'] = form.zipCode
-    cust['attn'] = form.attn
-    cust['phone'] = form.phone
-    cust['email'] = form.email
-    if client_id == -1:
-        cust['_id'] = next_sequence('client')
-        db.client.insert(cust)
-        return "Client added"
+    return render_template('/site/contact.html', headline='Client Info',client=cust)
 
-    db.clients.update(cust)
-    return "Client updated"
+@app.route('/client_edit/<int:client_id>', methods=('GET', 'POST'))
+def client_edit(client_id=None):
+    if 'cancel' in request.form:
+        return redirect(url_for('client_list'))
+
+    if request.method == 'GET':
+        if client_id != '-1':
+            cust = db.clients.find_one({'_id': client_id})
+            return render_template('/site/contact.html', headline='Client Info',client=cust)    
+
+    is_new = False
+    if client_id == '-1':
+        is_new = True
+        client_id = next_sequence('client')
+
+    cust = {}
+    
+    cust['name'] = request.form['name']
+    cust['address1'] = request.form['address1']
+    cust['address2'] = request.form['address2']
+    cust['city'] = request.form['city']
+    cust['state'] = request.form['state']
+    cust['zip'] = request.form['zip_code']
+    cust['attn'] = request.form['attn']
+    cust['phone'] = request.form['phone']
+    cust['email'] = request.form['email']
+
+    if is_new:
+        db.clients.insert(cust)
+    else:
+        db.clients.update_one({'_id': client_id}, {'$set': cust})
+
+    return redirect(url_for('client_list'))
 
 @app.route('/client_list')
 def client_list():
