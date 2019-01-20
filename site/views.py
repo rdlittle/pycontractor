@@ -70,31 +70,40 @@ def company_edit(company_id):
 def client_create():
     form = ContactForm()
     form.client_id = -1
-    cust = {}
-    return render_template('/site/contact.html', headline='Client Info',client=cust)
+    cust = {'_id': -1}
+    return render_template('/site/contact.html', headline='Client Info',client=cust,states=get_states(),action='create')
 
+@app.route('/client_edit/<client_id>', methods=('GET', 'POST'))
 @app.route('/client_edit/<int:client_id>', methods=('GET', 'POST'))
 def client_edit(client_id=None):
+
     if 'cancel' in request.form:
         return redirect(url_for('client_list'))
 
+    client_id = int(client_id)
+    
+    if 'delete' in request.form:
+        db.clients.remove({'_id': client_id})
+        return redirect(url_for('client_list'))
+
     if request.method == 'GET':
-        if client_id != '-1':
+        if client_id != -1:
             cust = db.clients.find_one({'_id': client_id})
-            return render_template('/site/contact.html', headline='Client Info',client=cust)    
+            return render_template('/site/contact.html', headline='Client Info',client=cust,states=get_states(),action='edit')    
 
     is_new = False
-    if client_id == '-1':
+    if client_id == -1:
         is_new = True
         client_id = next_sequence('client')
 
     cust = {}
     
+    cust['_id'] = client_id
     cust['name'] = request.form['name']
     cust['address1'] = request.form['address1']
     cust['address2'] = request.form['address2']
     cust['city'] = request.form['city']
-    cust['state'] = request.form['state']
+    cust['state'] = request.form['states']
     cust['zip'] = request.form['zip_code']
     cust['attn'] = request.form['attn']
     cust['phone'] = request.form['phone']

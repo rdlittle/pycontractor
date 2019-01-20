@@ -11,7 +11,7 @@
 <div class="row no-gutters">
     <div class="col-md-1 col-offset-3">{{ item._id }}</div>
     <div class="col-md-6">
-        <a href="{{ url_for('client_view',client_id=item._id) }}">{{ item.name }}</a>
+        <a href="{{ url_for('client_edit',client_id=item._id) }}">{{ item.name }}</a>
     </div>
 </div>
 {% endfor %}
