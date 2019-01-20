@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row no-gutters">
+    <div class="col-md-11">
+        <h2>{{ headline }}</h2>
+    </div>
+</div>
+
+<form action={{ url_for('control_edit')}} method='POST'>
+    {% for item in items %}
+        <div class="row no-gutters">
+            <div class="col-md-1">
+                {{item._id}}
+            </div>
+            <div class="col-md-1">
+                <input type='text' name="{{item._id}}" value="{{'%d'|format(item.seq)}}">
+            </div>
+        </div>
+    {% endfor %}
+    <div class="row no-gutters">
+        <div class="col-md-12 text-right">
+            <button type="submit" name="cancel">Cancel</button>
+            <button type="submit" name="submit">Submit</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

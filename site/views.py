@@ -136,3 +136,17 @@ def client_view(client_id):
 def client_list():
     clients = db.clients.find().sort('name', ASCENDING)
     return render_template('/site/client_list.html', items=clients)
+
+@app.route('/control', methods=('GET', 'POST'))
+def control_edit():
+    items = db.control.find({'_id': {'$ne': 'states'}})
+    
+    if request.method =='GET':
+        return render_template('/site/control.html',headline='Control',items=items)
+    
+    db.control.update_one( {'_id': 'client'}, { '$set': {'seq': int(request.form['client'])} } )
+    db.control.update_one( {'_id': 'company'}, { '$set': {'seq': int(request.form['company'])} } )
+    db.control.update_one( {'_id': 'invoice'}, { '$set': {'seq': int(request.form['invoice'])} } )
+    db.control.update_one( {'_id': 'timesheet'}, { '$set': {'seq': int(request.form['timesheet'])} } )
+
+    return render_template('/site/control.html',headline='Control',items=items)
