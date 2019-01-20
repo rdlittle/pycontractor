@@ -1,0 +1,11 @@
+{% macro state_selector(states, selected_state) -%}
+    <select id="states" name="states">
+    {% for abbr,full in states.items() %}
+        {% if abbr  == selected_state %}
+            <option value={{abbr}} selected = "selected">{{full}}</option>
+        {% else %}
+            <option value={{abbr}}>{{full}}</option>
+        {% endif %}
+    {% endfor %}
+    </select>
+{%- endmacro %}

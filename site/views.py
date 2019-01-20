@@ -4,6 +4,11 @@ import pdb
 from pymongo import ASCENDING
 from contractor.site.form import ContactForm
 
+def get_states():
+    states = db.control.find_one({'_id': 'states'})
+    _ = states.pop('_id')
+    return states
+
 @app.route('/company_list')
 def company_list():
     items = db.company.find().sort('name', ASCENDING)
@@ -13,26 +18,30 @@ def company_list():
 def company_create():
     if 'cancel' in request.form:
         return redirect(url_for('company_list'))
+
+    if 'delete' in request.form:
+        db.company.remove({'_id': int(request.form['id'])})
+        return redirect(url_for('company_list'))
     
     company = {}
     if request.method == 'GET':
-        return render_template('site/company.html',company=company,action='create')
+        return render_template('site/company.html',company=company,action='create',states=get_states())
     
     company['name'] = request.form['name']
     company['address1'] = request.form['address1']
     company['address2'] = request.form['address2']
     company['city'] = request.form['city']
-    company['state'] = request.form['state']
+    company['state'] = request.form['states']
     company['zip'] = request.form['zip']
     company['attn'] = request.form['attn']
     company['phone'] = request.form['phone']
     company['email'] = request.form['email']
 
-    if 'create' in request.form:
+    if request.form['action'] == 'create':
         company['_id'] = next_sequence('company')    
         db.company.insert(company)
     else:
-        db.company.update({'_id': request.form['id']}, company)
+        db.company.update({'_id': int(request.form['id'])}, company)
 
     return redirect(url_for('company_list'))
 
@@ -41,7 +50,7 @@ def company_edit(company_id):
 
     if request.method == 'GET':
         company = db.company.find_one({'_id': company_id})
-        return render_template('site/company.html',company=company,action='edit')
+        return render_template('site/company.html',company=company,action='edit',states=get_states())
 
     company = {}
     company['_id'] = company_id
@@ -49,7 +58,7 @@ def company_edit(company_id):
     company['address1'] = request.form['address1']
     company['address2'] = request.form['address2']
     company['city'] = request.form['city']
-    company['state'] = request.form['state']
+    company['state'] = request.form['states']
     company['zip'] = request.form['zip']
     company['attn'] = request.form['attn']
     company['phone'] = request.form['phone']

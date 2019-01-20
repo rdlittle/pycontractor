@@ -9,6 +9,7 @@
 
 <form action="{{ url_for('company_create') }}" method="POST">
 
+    {% from "_formhelpers.html" import state_selector %}
     <input type="hidden" name="action" value="{{ action }}">
     <input type="hidden" name="id" value="{{ company._id }}">
     <div class="container-fluid">
@@ -39,8 +40,8 @@
                 <input type="text" name="city" value="{{ company.city }}" style="width: 100%;">
             </div>
             <div class="col-md-1 mr-2 text-right">State</div>
-            <div class="col-md-1">
-                <input type="text" name="state" value="{{ company.state }}" style="width: 100%;">
+            <div class="col-md-3">
+                    {{ state_selector(states, company.state) }}
             </div>
             <div class="col-md-1 text-right mr-2">Zip</div>
             <div class="col-md-1">
@@ -71,6 +72,9 @@
 
         <div class="row no-gutters mt-2">
             <div class="col-md-12 text-right">
+                {% if action == 'edit' %}
+                    <button type="submit" name="delete" class="btn-primary btn-lg mr-2">Delete</button>
+                {% endif %}
                 <button type="submit" name="cancel" class="btn-primary btn-lg mr-2">Cancel</button>
                 <button type="submit" name="submit" class="btn-primary btn-lg">Submit</button>
             </div>
