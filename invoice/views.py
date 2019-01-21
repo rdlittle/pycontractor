@@ -1,10 +1,11 @@
 from contractor import app, client, db, next_sequence
-from flask import redirect, render_template, url_for, session, request
+from flask import redirect, render_template, url_for, session, request, make_response
 import pdb
 from timesheet.model import TimeSheet
 from pymongo import DESCENDING
 from bson import ObjectId
 from datetime import datetime
+import pdfkit
 
 @app.route('/')
 @app.route('/invoice_list')
@@ -62,4 +63,27 @@ def invoice_create():
     invoice['posted'] = False
     db.invoice.insert_one(invoice)
     return redirect(url_for('invoice_list'))
+
+@app.route('/invoice_view/<int:invoice_id>', methods=['GET'])
+def invoice_view(invoice_id):
+    options = {
+        'page-size': 'Letter',
+        'margin-left': '0.75in',
+        'margin-right': '0.75in',
+        'margin-top': '0.75in',
+        'margin-bottom': '0.75in'
+    }
+
+    today = datetime.now().strftime('%m/%d/%Y')
+
+    invoice = db.invoice.find_one({'_id': invoice_id})
+    _invoice = render_template('invoice/view.html',invoice=invoice,date=today)
+
+    _sheet = pdfkit.from_string(_invoice, False, options=options)
+
+    response = make_response(_sheet)
+    response.headers['Content-type'] = 'application/pdf'
+    response.headers['Content-disposition'] = 'inline; filename=output.pdf'
+    return response
     
+    #return render_template('invoice/view.html',invoice=invoice,date=today)

@@ -1,3 +1,5 @@
 Flask
 flask_script
 Flask-WTF
+pdfkit
+wkhtmltopdf

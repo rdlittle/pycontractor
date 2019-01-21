@@ -38,6 +38,9 @@
     <div class="col-md-1">
         <a href="{{ url_for('invoice_edit',invoice_id=item._id) }}">Edit</a>
     </div>
+    <div class="col-md-1">
+        <a href="{{ url_for('invoice_view',invoice_id=item._id) }}">View</a>
+    </div>    
 </div>
 {% endfor %}
 {% endblock %}
