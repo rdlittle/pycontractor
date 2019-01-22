@@ -66,24 +66,34 @@ def invoice_create():
 
 @app.route('/invoice_view/<int:invoice_id>', methods=['GET'])
 def invoice_view(invoice_id):
-    options = {
-        'page-size': 'Letter',
-        'margin-left': '0.75in',
-        'margin-right': '0.75in',
-        'margin-top': '0.75in',
-        'margin-bottom': '0.75in'
-    }
 
     today = datetime.now().strftime('%m/%d/%Y')
-
     invoice = db.invoice.find_one({'_id': invoice_id})
-    _invoice = render_template('invoice/view.html',invoice=invoice,date=today)
+    client_rec = db.clients.find_one({'_id': invoice['client']})
+    company = db.company.find_one({'_id': 1})
 
-    _sheet = pdfkit.from_string(_invoice, False, options=options)
+    action = request.args['action']
 
-    response = make_response(_sheet)
-    response.headers['Content-type'] = 'application/pdf'
-    response.headers['Content-disposition'] = 'inline; filename=output.pdf'
-    return response
+    args = {}
+    args['invoice'] = invoice
+    args['client'] = client_rec
+    args['date'] = today
+    args['action'] = action
+    args['company'] = company
+
+    if action == 'print':
+        options = {
+            'page-size': 'Letter',
+            'margin-left': '0.75in',
+            'margin-right': '0.75in',
+            'margin-top': '0.75in',
+            'margin-bottom': '0.75in'
+        }
+        _invoice = render_template('invoice/view.html',invoice=invoice,date=today,company=company,client=client_rec,action=action)
+        _sheet = pdfkit.from_string(_invoice, False, options=options)
+        response = make_response(_sheet)
+        response.headers['Content-type'] = 'application/pdf'
+        response.headers['Content-disposition'] = 'inline; filename=output.pdf'
+        return response
     
-    #return render_template('invoice/view.html',invoice=invoice,date=today)
+    return render_template('invoice/view.html',invoice=invoice,date=today,company=company,client=client_rec,action=action)

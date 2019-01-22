@@ -20,8 +20,11 @@
 </head>
 
 <body>
-    <div style="width: 8.5in;">
-        <div class="header"">
+    <div {% if action == 'view' %} style="width: 8.5in;" {% endif %}>
+        {% if action == 'view' %}
+            <a href="{{url_for('invoice_list')}}">Back to listing</a>
+        {% endif %}
+        <div class="header">
             <table>
                 <tr>
                     <td style=" width: 95%;">
@@ -58,22 +61,32 @@
 
         <table style="width: 100%;"">
             <tr>
-                <td style="width: 75%;">
+                <td style="width: 65%;">
                     <table>
                         <tr>
                             <td class="pr-3">
                                 Bill to:
                             </td>
-                            <td>Market America</td>
+                            <td>{{ client.name }}</td>
                         </tr>
                         <tr>
                             <td class="pr-3">Address</td>
-                            <td>1302 Pleasant Ridge Rd.</td>
+                            <td>{{ client.address1 }}</td>
+                        </tr>
+                        {% if client.address2 != "" %}                       
+                        <tr>
+                            <td class="pr-3"></td>
+                            <td>{{ client.address1 }}</td>
+                        </tr>                        
+                        {% endif %}
+                        <tr>
+                            <td class="pr-3"></td>
+                            <td>{{ client.city }}, {{ client.state }}  {{ client.zip }}</td>
                         </tr>
                         <tr>
-                            <td class="pr-3">City</td>
-                            <td>Greensboro, NC  27409</td>
-                        </tr>                        
+                            <td class="pr-3">Attn:</td>
+                            <td class="pr-3">{{ client.attn }}</td>
+                        </tr>
                     </table>
                 </td>
                 <td>
