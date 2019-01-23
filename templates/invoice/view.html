@@ -15,14 +15,16 @@
 
         .header {
             background: lightgreen;
+            margin-bottom: 1em;
+            border-bottom: thin solid black;
         }
     </style>
 </head>
 
 <body>
-    <div {% if action == 'view' %} style="width: 8.5in;" {% endif %}>
+    <div {% if action == 'view' %} style="width: 8.5in; margin-left: 4em;" {% endif %}>
         {% if action == 'view' %}
-            <a href="{{url_for('invoice_list')}}">Back to listing</a>
+            <a href="{{url_for('invoice_list')}}" style="margin-bottom: 2em;">Back to listing</a>
         {% endif %}
         <div class="header">
             <table>
@@ -40,13 +42,13 @@
                 <td style="width: 90%;">
                     <table class="pl-2">
                         <tr>
-                            <td>Robert Little</td>
+                            <td>{{ company.attn }}</td>
                         </tr>
                         <tr>
-                            <td>3851 Michigan Ave W</td>
+                            <td>{{ company.address1 }}</td>
                         </tr>
                         <tr>
-                            <td>Battle Creek, MI 49037</td>
+                            <td>{{ company.city }}, {{ company.state }} {{ company.zip }}</td>
                         </tr>
                     </table>
                 </td>
