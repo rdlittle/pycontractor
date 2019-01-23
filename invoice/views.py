@@ -32,6 +32,18 @@ def invoice_close(invoice_id):
     db.invoice.update({'_id': invoice_id}, invoice)
     return redirect(url_for('invoice_list'))
 
+@app.route('/invoice_open/<int:invoice_id>', methods=['GET'])
+def invoice_open(invoice_id):
+    if 'cancel' in request.form:
+        return redirect(url_for('invoice_list'))
+
+    invoice = db.invoice.find_one({'_id': invoice_id})
+    invoice['check_number'] = ''
+    invoice['status'] = 'open'
+    invoice['closed_date'] = ''
+    db.invoice.update({'_id': invoice_id}, invoice)
+    return redirect(url_for('invoice_edit',invoice_id=invoice_id))
+
 @app.route('/invoice_delete/<int:invoice_id>')
 def invoice_delete(invoice_id):
     return "Delete invoice"

@@ -32,10 +32,12 @@
 </div>
 {% endfor %}
 
+<div class="row no-gutters mt-2"></div>
 {% if invoice.status == 'open' %}
-<div class="row no-gutters mt-2">
     <a href="{{ url_for('invoice_close', invoice_id=invoice._id)}}">Close this invoice</a>
-</div>
+{% else %}
+    <a href="{{ url_for('invoice_open', invoice_id=invoice._id)}}">Reopen this invoice</a>
 {% endif %}
+</div>
 
 {% endblock %}
