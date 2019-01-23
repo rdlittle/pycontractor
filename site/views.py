@@ -4,6 +4,12 @@ import pdb
 from pymongo import ASCENDING
 from contractor.site.form import ContactForm
 
+def get_rates():
+    rates = {}
+    for r in db.rates.find():
+        rates[str(int(r['_id']))] = int(r['rate'])
+    return rates
+
 def get_states():
     states = db.control.find_one({'_id': 'states'})
     _ = states.pop('_id')
@@ -24,6 +30,7 @@ def company_create():
         return redirect(url_for('company_list'))
     
     company = {}
+    
     if request.method == 'GET':
         return render_template('site/company.html',company=company,action='create',states=get_states())
     
@@ -71,7 +78,7 @@ def client_create():
     form = ContactForm()
     form.client_id = -1
     cust = {'_id': -1}
-    return render_template('/site/contact.html', headline='Client Info',client=cust,states=get_states(),action='create')
+    return render_template('/site/contact.html', headline='Client Info',client=cust,rates=get_rates(),states=get_states(),action='create')
 
 @app.route('/client_edit/<client_id>', methods=('GET', 'POST'))
 @app.route('/client_edit/<int:client_id>', methods=('GET', 'POST'))
@@ -89,7 +96,7 @@ def client_edit(client_id=None):
     if request.method == 'GET':
         if client_id != -1:
             cust = db.clients.find_one({'_id': client_id})
-            return render_template('/site/contact.html', headline='Client Info',client=cust,states=get_states(),action='edit')    
+            return render_template('/site/contact.html', headline='Client Info',client=cust,rates=get_rates(),states=get_states(),action='edit')    
 
     is_new = False
     if client_id == -1:
@@ -108,6 +115,7 @@ def client_edit(client_id=None):
     cust['attn'] = request.form['attn']
     cust['phone'] = request.form['phone']
     cust['email'] = request.form['email']
+    cust['rate'] = request.form['rate']
 
     if is_new:
         db.clients.insert(cust)
@@ -143,6 +151,9 @@ def control_edit():
     
     if request.method =='GET':
         return render_template('/site/control.html',headline='Control',items=items)
+
+    if 'cancel' in request.form:
+        return redirect(url_for('invoice_list'))
     
     db.control.update_one( {'_id': 'client'}, { '$set': {'seq': int(request.form['client'])} } )
     db.control.update_one( {'_id': 'company'}, { '$set': {'seq': int(request.form['company'])} } )

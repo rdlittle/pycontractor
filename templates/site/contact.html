@@ -71,10 +71,25 @@
             </div>
         </div>
 
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">Rate</div>
+            <div class="col-md-5">
+                <select name="rate">
+                    {% for k,v in rates.items() %}
+                        {% if client.rate == k %}
+                        <option value={{ k }} selected="selected">{{ '%2.2f'|format(v) }}</option>
+                        {% else %}
+                        <option value={{ k }}>{{ '%2.2f'|format(v) }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
         <div class="row no-gutters mt-2">
             <div class="col-md-12 text-right">
                 {% if action == 'edit' %}
-                    <button type="submit" name="delete" class="btn-primary btn-lg mr-2">Delete</button>
+                <button type="submit" name="delete" class="btn-primary btn-lg mr-2">Delete</button>
                 {% endif %}
                 <button type="submit" name="cancel" class="btn-primary btn-lg mr-2">Cancel</button>
                 <button type="submit" name="submit" class="btn-primary btn-lg">Submit</button>

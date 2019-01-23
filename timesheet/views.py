@@ -47,7 +47,7 @@ def timesheet_edit(inv_id, tsid):
 
     invoice['detail'][ts_index] = ts
 
-    db.invoice.update({'_id': inv_id}, invoice )
+    db.invoice.replace_one({'_id': inv_id}, invoice, True)
 
     return redirect(url_for('invoice_edit',invoice_id=inv_id))
 
@@ -69,6 +69,11 @@ def timesheet_create(invoice_id):
         entry['hours'] = request.form['hours']
 
         db.timesheet.insert_one(entry)
+
+        invoice = db.invoice_find_one({'_id': invoice_id})
+        invoice.hours += entry['hours']
+        invoice.amount = invoice.hours * 50
+        db.invoice.replace_one({'_id': invoice_id}, invoice, True)
 
         db.invoice.update({'_id': invoice_id}, { '$push': {'detail': entry}})
 
