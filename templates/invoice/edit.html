@@ -33,7 +33,11 @@
 {% endfor %}
 
 <div class="row no-gutters mt-2"></div>
+    <a href="{{ url_for('invoice_list')}}">Return to list</a>
+    <br>
 {% if invoice.status == 'open' %}
+    <a href="{{ url_for('invoice_post', invoice_id=invoice._id)}}">Mark as posted</a>
+{% elif invoice.status =='posted' %}
     <a href="{{ url_for('invoice_close', invoice_id=invoice._id)}}">Close this invoice</a>
 {% else %}
     <a href="{{ url_for('invoice_open', invoice_id=invoice._id)}}">Reopen this invoice</a>

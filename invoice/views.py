@@ -23,7 +23,7 @@ def invoice_close(invoice_id):
         return render_template('invoice/close.html', invoice = invoice)
 
     if request.form['receipt_id'] == "":
-        return redirect(request.referrer)
+        return redirect(url_for('invoice_list'))
 
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['check_number'] = request.form['receipt_id']
@@ -31,6 +31,13 @@ def invoice_close(invoice_id):
     invoice['closed_date'] = datetime.now()
     db.invoice.update({'_id': invoice_id}, invoice)
     return redirect(url_for('invoice_list'))
+
+@app.route('/invoice_post/<int:invoice_id>', methods=['GET'])
+def invoice_post(invoice_id):
+    invoice = db.invoice.find_one({'_id': invoice_id})
+    invoice['status'] = 'posted' 
+    db.invoice.update({'_id': invoice_id}, invoice)
+    return redirect(url_for('invoice_list'))       
 
 @app.route('/invoice_open/<int:invoice_id>', methods=['GET'])
 def invoice_open(invoice_id):
