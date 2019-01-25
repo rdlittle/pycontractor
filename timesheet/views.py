@@ -70,8 +70,8 @@ def timesheet_create(invoice_id):
         db.timesheet.insert_one(entry)
 
         invoice = db.invoice.find_one({'_id': invoice_id})
-        invoice['hours'] += entry['hours']
-        invoice['amount'] = invoice['hours'] * 50
+        invoice['hours'] += float(entry['hours'])
+        invoice['amount'] = float(invoice['hours'] * 50)
         db.invoice.replace_one({'_id': invoice_id}, invoice, True)
 
         db.invoice.update({'_id': invoice_id}, { '$push': {'detail': entry}})
