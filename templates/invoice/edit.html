@@ -7,7 +7,7 @@
         <h2>Invoice Edit</h2>
     </div>
     <div class="col-md-1 text-right">
-        <h2><a href="{{ url_for('timesheet_entry',invoice_id=invoice._id) }}">+</a></h2>
+        <h2><a class="btn btn-success" role="button" href="{{ url_for('timesheet_entry',invoice_id=invoice._id) }}">Add time</a></h2>
     </div>
 </div>
 
@@ -32,15 +32,14 @@
 </div>
 {% endfor %}
 
-<div class="row no-gutters mt-2"></div>
-    <a href="{{ url_for('invoice_list')}}">Return to list</a>
-    <br>
+<div class="row no-gutters mt-2 text-right"></div>
+    <a class="btn btn-primary" role="button" href="{{ url_for('invoice_list')}}">Return to list</a>
 {% if invoice.status == 'open' %}
-    <a href="{{ url_for('invoice_post', invoice_id=invoice._id)}}">Mark as posted</a>
+    <a class="btn btn-warning" role="button" href="{{ url_for('invoice_post', invoice_id=invoice._id)}}">Mark as posted</a>
 {% elif invoice.status =='posted' %}
-    <a href="{{ url_for('invoice_close', invoice_id=invoice._id)}}">Close this invoice</a>
+    <a class="btn btn-success" role="button" href="{{ url_for('invoice_close', invoice_id=invoice._id)}}">Close this invoice</a>
 {% else %}
-    <a href="{{ url_for('invoice_open', invoice_id=invoice._id)}}">Reopen this invoice</a>
+    <a class="btn btn-info" role="button" href="{{ url_for('invoice_open', invoice_id=invoice._id)}}">Reopen this invoice</a>
 {% endif %}
 </div>
 

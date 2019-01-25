@@ -22,10 +22,7 @@
 </head>
 
 <body>
-    <div {% if action == 'view' %} style="width: 8.5in; margin-left: 4em;" {% endif %}>
-        {% if action == 'view' %}
-            <a href="{{url_for('invoice_list')}}" style="margin-bottom: 2em;">Back to listing</a>
-        {% endif %}
+    <div {% if action=='view' %} style="width: 8.5in; margin-left: 4em;" {% endif %}>
         <div class="header">
             <table>
                 <tr>
@@ -63,51 +60,51 @@
 
         <table style="width: 100%;"">
             <tr>
-                <td style="width: 65%;">
-                    <table>
-                        <tr>
-                            <td class="pr-3">
-                                Bill to:
-                            </td>
-                            <td>{{ client.name }}</td>
-                        </tr>
-                        <tr>
-                            <td class="pr-3">Address</td>
-                            <td>{{ client.address1 }}</td>
-                        </tr>
-                        {% if client.address2 != "" %}                       
-                        <tr>
-                            <td class="pr-3"></td>
-                            <td>{{ client.address1 }}</td>
-                        </tr>                        
-                        {% endif %}
-                        <tr>
-                            <td class="pr-3"></td>
-                            <td>{{ client.city }}, {{ client.state }}  {{ client.zip }}</td>
-                        </tr>
-                        <tr>
-                            <td class="pr-3">Attn:</td>
-                            <td class="pr-3">{{ client.attn }}</td>
-                        </tr>
-                    </table>
-                </td>
-                <td>
-                    <table style="width: 100%;">
-                        <tr>
-                            <td class="pr-3">Invoice date</td>
-                            <td class="text-right pr-2">{{ invoice.date.strftime('%m/%d/%Y') }}</td>
-                        </tr>
-                        <tr>
-                            <td class="pr-3">Invoice #</td>
-                            <td class="text-right pr-2">{{ invoice._id }}</td>
-                        </tr>
-                    </table>
-                </td>
+                <td style=" width: 65%;">
+            <table>
+                <tr>
+                    <td class="pr-3">
+                        Bill to:
+                    </td>
+                    <td>{{ client.name }}</td>
+                </tr>
+                <tr>
+                    <td class="pr-3">Address</td>
+                    <td>{{ client.address1 }}</td>
+                </tr>
+                {% if client.address2 != "" %}
+                <tr>
+                    <td class="pr-3"></td>
+                    <td>{{ client.address1 }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td class="pr-3"></td>
+                    <td>{{ client.city }}, {{ client.state }} {{ client.zip }}</td>
+                </tr>
+                <tr>
+                    <td class="pr-3">Attn:</td>
+                    <td class="pr-3">{{ client.attn }}</td>
+                </tr>
+            </table>
+            </td>
+            <td>
+                <table style="width: 100%;">
+                    <tr>
+                        <td class="pr-3">Invoice date</td>
+                        <td class="text-right pr-2">{{ invoice.date.strftime('%m/%d/%Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="pr-3">Invoice #</td>
+                        <td class="text-right pr-2">{{ invoice._id }}</td>
+                    </tr>
+                </table>
+            </td>
             </tr>
         </table>
 
         <div>
-            
+
         </div>
 
         <div style="width: 100%; height: 2em;" class="header"></div>
@@ -121,7 +118,12 @@
             </tr>
             {% endfor %}
         </table>
-
+        {% if action == 'view' %}
+        <div class="mt-2 text-right">
+            <a class="btn btn-primary" role="button" href="{{url_for('invoice_list')}}">Back to listing</a>
+            <a class="btn btn-success" role="button" href="{{ url_for('invoice_view',invoice_id=invoice._id,action='print') }}">Print</a>
+        </div>
+        {% endif %}
     </div>
 </body>
 
