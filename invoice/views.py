@@ -73,7 +73,7 @@ def invoice_create():
     invoice['_id'] = next_sequence('invoice')
     invoice['date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
     invoice['hours'] = 0
-    invoice['client'] = request.form['client_id']
+    invoice['client'] = int(request.form['client_id'])
     invoice['amount'] = float(0)
     invoice['detail'] = []
     invoice['status'] = 'open'

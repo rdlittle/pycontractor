@@ -21,7 +21,7 @@
         {{ item.date.strftime('%m/%d/%Y') }}
     </div>
     <div class="col-md-1">
-        {{ item.client }}
+        {{ '%2d'|format(item.client) }}
     </div>
     <div class="col-md-1 number">
         {{ item.hours }}

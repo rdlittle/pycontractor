@@ -13,8 +13,9 @@
 
 <div class="row no-gutters">
     <div class="col-md-1 alert-primary">{{ invoice.date.strftime('%m/%d/%Y') }}</div>
-    <div class="col-md-8 alert-primary">Invoice: {{ invoice._id }}</div>
-    <div class="col-md-2 alert-primary">Status: {{ invoice.status }}</div>
+    <div class="col-md-4 alert-primary">Invoice: {{ invoice._id }}</div>
+    <div class="col-md-4 alert-primary">Status: {{ invoice.status }}</div>
+    <div class="col-md-2 alert-primary text-right">Amount: ${{ invoice.amount }}</div>
     <div class="col-md-1 alert-primary text-right">Hours: {{ invoice.hours }}</div>
 </div>
 
