@@ -74,7 +74,7 @@ def invoice_create():
     invoice['date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
     invoice['hours'] = 0
     invoice['client'] = request.form['client_id']
-    invoice['amount'] = 0
+    invoice['amount'] = float(0)
     invoice['detail'] = []
     invoice['status'] = 'open'
     invoice['check_number'] = ''

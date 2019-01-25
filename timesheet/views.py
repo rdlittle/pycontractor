@@ -66,7 +66,7 @@ def timesheet_create(invoice_id):
         entry['_id'] = next_sequence('timesheet')
         entry['date'] = datetime.strptime(request.form['date'],'%M/%d/%Y')
         entry['description'] = request.form['description']
-        entry['hours'] = int(request.form['hours'])
+        entry['hours'] = float(request.form['hours'])
         db.timesheet.insert_one(entry)
 
         invoice = db.invoice.find_one({'_id': invoice_id})
