@@ -64,15 +64,14 @@ def timesheet_create(invoice_id):
             return render_template(url_for('entry'))
 
         entry['_id'] = next_sequence('timesheet')
-        entry['date'] = datetime.strptime(request.form['date'],'%M/%d/%Y').isoformat()
+        entry['date'] = datetime.strptime(request.form['date'],'%M/%d/%Y')
         entry['description'] = request.form['description']
-        entry['hours'] = request.form['hours']
-
+        entry['hours'] = int(request.form['hours'])
         db.timesheet.insert_one(entry)
 
-        invoice = db.invoice_find_one({'_id': invoice_id})
-        invoice.hours += entry['hours']
-        invoice.amount = invoice.hours * 50
+        invoice = db.invoice.find_one({'_id': invoice_id})
+        invoice['hours'] += entry['hours']
+        invoice['amount'] = invoice['hours'] * 50
         db.invoice.replace_one({'_id': invoice_id}, invoice, True)
 
         db.invoice.update({'_id': invoice_id}, { '$push': {'detail': entry}})
