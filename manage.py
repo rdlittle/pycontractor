@@ -8,10 +8,10 @@ from contractor import app
 
 manager = Manager(app)
 manager.add_command("runserver", Server(
-    #use_debugger = True,
-    #use_reloader = True,
+    use_debugger = True,
+    use_reloader = True,
     host = 'mustang.littleacres.lan',
-    port = int(os.getenv('PORT', 5080))
+    port = int(os.getenv('PORT', 5000))
 ))
 
 if __name__ == '__main__':

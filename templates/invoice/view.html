@@ -92,7 +92,11 @@
                 <table style="width: 100%;">
                     <tr>
                         <td class="pr-3">Invoice date</td>
-                        <td class="text-right pr-2">{{ invoice.date.strftime('%m/%d/%Y') }}</td>
+                        {% if invoice.close_date %}
+                            <td class="text-right pr-2">{{ invoice.close_date.strftime('%m/%d/%Y') }}</td>
+                        {% else %}
+                            <td class="text-right pr-2">{{ invoice.date.strftime('%m/%d/%Y') }}</td>
+                        {% endif %}
                     </tr>
                     <tr>
                         <td class="pr-3">Invoice #</td>

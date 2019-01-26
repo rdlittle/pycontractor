@@ -12,13 +12,27 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-md-1 font-weight-bold">Invoice#</div>
+    <div class="col-md-1 font-weight-bold">Date</div>
+    <div class="col-md-1 font-weight-bold">Client</div>
+    <div class="col-md-1 font-weight-bold text-right">Hours</div>
+    <div class="col-md-1 font-weight-bold text-right">Amount</div>
+    <div class="col-md-1 font-weight-bold">Status</div>
+    <div class="col-md-1 font-weight-bold">Check#</div>
+    <div class="col-md-2 font-weight-bold">Date Paid</div>
+</div>
 {% for item in items %}
 <div class="row">
     <div class="col-md-1">
         {{ item._id }}
     </div>
     <div class="col-md-1">
-        {{ item.date.strftime('%m/%d/%Y') }}
+        {% if item.close_date %}
+            {{ item.close_date.strftime('%m/%d/%Y') }}
+        {% else %}
+            {{ item.date.strftime('%m/%d/%Y') }}
+        {% endif %}
     </div>
     <div class="col-md-1">
         {{ '%2d'|format(item.client) }}
@@ -34,6 +48,11 @@
     </div>
     <div class="col-md-1">
         {{ item.check_number }}
+    </div>
+    <div class="col-md-1">
+        {% if item.paid_date %}
+            {{ item.paid_date.strftime('%m/%d/%Y') }}
+        {% endif %}
     </div>
     <div class="col-md-1">
         <a href="{{ url_for('invoice_edit',invoice_id=item._id) }}">Edit</a>

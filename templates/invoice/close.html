@@ -8,19 +8,21 @@
 </div>
 
 <div class="row no-gutters">
-    <div class="col-md-1 alert-primary">{{ invoice.date.strftime('%m/%d/%Y') }}</div>
-    <div class="col-md-10 alert-primary">Invoice: {{ invoice._id }}</div>
-    <div class="col-md-1 alert-primary text-right">Hours: {{ invoice.hours }}</div>
+    <div class="col-md-1 alert-primary">Invoice:</div>
+    <div class="col-md-3 alert-primary">{{ invoice._id }}</div>
+    <div class="col-md-1 alert-primary">Amount:</div>
+    <div class="col-md-5 alert-primary">{{ '$%5.2f'|format(invoice.amount) }}</div>
+    <div class="col-md-1 alert-primary text-right">Hours</div>
+    <div class="col-md-1 alert-primary text-right">{{ '%2.2f'|format(invoice.hours) }}</div>
 </div>
 
 <form action="{{ url_for('invoice_close',invoice_id=invoice._id) }}" method="POST">
     <div class="row mt-3">
-        <div class="col-md-1">Receipt:</div>
-        <div class="col-md-3"><input type="text" name="receipt_id"></div>
-        <div class="col-md-1">Amount:</div>
-        <div class="col-md-2">{{ '%5.2f'|format(invoice.amount) }}</div>
+        <div class="col-md-2">Close date:</div>
+        <div class="col-md-1">
+            <input type="text" size="10" id="datepicker" name="date" value="{{ invoice.close_date }}">
+        </div>
     </div>
-
     <div class="row mt-3">
         <div class="col-md-4">
             <button type="submit" name="ok" class="btn-primary pt-1 pb-1 pl-4 pr-4">OK</button>
