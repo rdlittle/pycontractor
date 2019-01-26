@@ -131,7 +131,7 @@ def invoice_view(invoice_id):
         
         if 'close_date' in invoice:
             if invoice['close_date']:
-                inv_date = invoice.close_date.strftime('%Y%m%d')
+                inv_date = invoice['close_date'].strftime('%Y%m%d')
 
         file_name = 'MA-'+inv_date+'-'+str(invoice['_id'])+".pdf"
         _invoice = render_template('invoice/view.html', invoice=invoice,
