@@ -31,7 +31,7 @@ def invoice_post(invoice_id):
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['check_number'] = request.form['check_number']
     invoice['status'] = 'paid'
-    invoice['paid_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
+    invoice['paid_date'] = datetime.strptime(request.form['date'], '%Y-%m-%d %H:%M:%S')
     db.invoice.update({'_id': invoice_id}, invoice)
     return redirect(url_for('invoice_list'))
 
@@ -44,10 +44,10 @@ def invoice_close(invoice_id):
     if request.method == 'GET':
         invoice = db.invoice.find_one({'_id': invoice_id})
         return render_template('invoice/close.html', invoice=invoice)
-
+    
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['status'] = 'closed'
-    invoice['close_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
+    invoice['close_date'] = datetime.strptime(request.form['date'], '%Y-%m-%d %H:%M:%S')
     db.invoice.update({'_id': invoice_id}, invoice)
     return redirect(url_for('invoice_list'))
 
@@ -58,7 +58,7 @@ def invoice_open(invoice_id):
         return redirect(url_for('invoice_list'))
 
     invoice = db.invoice.find_one({'_id': invoice_id})
-    invoice['check_number'] = ''
+    #invoice['check_number'] = ''
     invoice['status'] = 'open'
     invoice['closed_date'] = ''
     db.invoice.update({'_id': invoice_id}, invoice)
