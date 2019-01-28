@@ -1,5 +1,5 @@
 from contractor import app, client, db, next_sequence
-from flask import redirect, render_template, url_for, session, request, make_response
+from flask import flash, redirect, render_template, url_for, session, request, make_response
 import pdb
 from timesheet.model import TimeSheet
 from pymongo import DESCENDING
@@ -25,8 +25,12 @@ def invoice_post(invoice_id):
         invoice = db.invoice.find_one({'_id': invoice_id})
         return render_template('invoice/post.html', invoice=invoice)
 
-    if request.form['check_number'] == '':
-        return redirect(url_for('invoice_list'))
+    if request.form['check_number'] == '' or request.form['date'] == '':
+        if request.form['date'] == '':
+            flash('Received date is required', category='error')        
+        if request.form['check_number'] == '':
+            flash('Check number is required', category='error')
+        return redirect(url_for('invoice_post',invoice_id=invoice_id))
 
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['check_number'] = request.form['check_number']

@@ -17,7 +17,8 @@
     <div class="row mt-3">
         <div class="col-md-2">Received date:</div>
         <div class="col-md-2">
-            <input type="text" size="10" id="datepicker" name="date" {% if invoice.paid_date %} value="{{ invoice.paid_date }}" {% endif %}>
+            <input type="text" size="10" id="datepicker" name="date" {% if invoice.paid_date %} value="{{ invoice.paid_date }}"
+                {% endif %}>
         </div>
         <div class="col-md-1">Check #:</div>
         <div class="col-md-3"><input type="text" name="check_number" value="{{ invoice.check_number }}"></div>
@@ -29,6 +30,12 @@
         <div class="col-md-4">
             <button type="submit" name="ok" class="btn-primary pt-1 pb-1 pl-4 pr-4">OK</button>
             <button type="submit" name="cancel" class="btn-primary ml-2 pt-1 pb-1 pl-4 pr-4">Cancel</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            {% include '_flashmessages.html' %}
         </div>
     </div>
 
