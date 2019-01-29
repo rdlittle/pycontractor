@@ -20,7 +20,7 @@
     <div class="row mt-3">
         <div class="col-md-2">Close date:</div>
         <div class="col-md-1">
-            <input type="text" size="10" id="datepicker" name="date" value="{{ invoice.close_date }}">
+            <input type="text" size="10" id="datepicker" name="date" value="{{ invoice.close_date.strftime('%m/%d/%Y') }}">
         </div>
     </div>
     <div class="row mt-3">

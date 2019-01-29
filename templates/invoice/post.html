@@ -17,7 +17,7 @@
     <div class="row mt-3">
         <div class="col-md-2">Received date:</div>
         <div class="col-md-2">
-            <input type="text" size="10" id="datepicker" name="date" {% if invoice.paid_date %} value="{{ invoice.paid_date }}"
+            <input type="text" size="10" id="datepicker" name="date" {% if invoice.paid_date %} value="{{ invoice.paid_date.strftime('%m/%d/%Y') }}"
                 {% endif %}>
         </div>
         <div class="col-md-1">Check #:</div>

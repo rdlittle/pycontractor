@@ -21,21 +21,26 @@ def invoice_post(invoice_id):
     if 'cancel' in request.form:
         return redirect(url_for('invoice_list'))
 
-    if request.method == 'GET':
-        invoice = db.invoice.find_one({'_id': invoice_id})
-        return render_template('invoice/post.html', invoice=invoice)
+    invoice = db.invoice.find_one({'_id': invoice_id})
 
+    if request.method == 'GET':
+        return render_template('invoice/post.html', invoice=invoice)
+    
     if request.form['check_number'] == '' or request.form['date'] == '':
         if request.form['date'] == '':
-            flash('Received date is required', category='error')        
+            flash('Received date is required', category='error')
+        else:
+            invoice['paid_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
         if request.form['check_number'] == '':
             flash('Check number is required', category='error')
-        return redirect(url_for('invoice_post',invoice_id=invoice_id))
+        else:
+            invoice['check_number'] = request.form['check_number']
+        return render_template('invoice/post.html',invoice_id=invoice_id, invoice=invoice)
 
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['check_number'] = request.form['check_number']
     invoice['status'] = 'paid'
-    invoice['paid_date'] = datetime.strptime(request.form['date'], '%Y-%m-%d %H:%M:%S')
+    invoice['paid_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
     db.invoice.update({'_id': invoice_id}, invoice)
     return redirect(url_for('invoice_list'))
 
@@ -51,7 +56,7 @@ def invoice_close(invoice_id):
     
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['status'] = 'closed'
-    invoice['close_date'] = datetime.strptime(request.form['date'], '%Y-%m-%d %H:%M:%S')
+    invoice['close_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
     db.invoice.update({'_id': invoice_id}, invoice)
     return redirect(url_for('invoice_list'))
 
