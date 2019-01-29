@@ -19,6 +19,7 @@
     <div class="col-md-1 font-weight-bold text-right">Hours</div>
     <div class="col-md-1 font-weight-bold text-right">Amount</div>
     <div class="col-md-1 font-weight-bold">Status</div>
+    <div class="col-md-1 font-weight-bold">Sent</div>
     <div class="col-md-1 font-weight-bold">Check#</div>
     <div class="col-md-2 font-weight-bold">Date Paid</div>
 </div>
@@ -47,9 +48,12 @@
         {{ item.status }}
     </div>
     <div class="col-md-1">
+        {{ item.sent }}
+    </div>    
+    <div class="col-md-1">
         {{ item.check_number }}
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
         {% if item.paid_date %}
             {{ item.paid_date.strftime('%m/%d/%Y') }}
         {% endif %}

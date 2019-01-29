@@ -26,6 +26,10 @@ def invoice_post(invoice_id):
     if request.method == 'GET':
         return render_template('invoice/post.html', invoice=invoice)
     
+    if 'sent' in request.form:
+        db.invoice.update_one({'_id': invoice_id}, {'$set': {'sent': 'Y'}})
+        return redirect(url_for('invoice_list'))
+
     if request.form['check_number'] == '' or request.form['date'] == '':
         if request.form['date'] == '':
             flash('Received date is required', category='error')
@@ -67,7 +71,6 @@ def invoice_open(invoice_id):
         return redirect(url_for('invoice_list'))
 
     invoice = db.invoice.find_one({'_id': invoice_id})
-    #invoice['check_number'] = ''
     invoice['status'] = 'open'
     invoice['closed_date'] = ''
     db.invoice.update({'_id': invoice_id}, invoice)

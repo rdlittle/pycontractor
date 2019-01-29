@@ -7,3 +7,9 @@
 .number {
     text-align: right;
 }
+
+a.logo:link, a.logo:visited, a.logo:hover, a.logo:active {
+    color: black;
+    text-decoration: none;
+    background: transparent;
+}
