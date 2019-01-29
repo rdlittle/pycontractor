@@ -109,6 +109,7 @@ def invoice_create():
     invoice['period'] = next_sequence('period')
     invoice['closed_date'] = ''
     invoice['posted'] = False
+    invoice['sent'] = ''
     db.invoice.insert_one(invoice)
     return redirect(url_for('invoice_list'))
 
