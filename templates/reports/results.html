@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row no-gutters">
+    <div class="col-md-11">
+        <h2>Search Results</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-1 font-weight-bold">Invoice#</div>
+    <div class="col-md-1 font-weight-bold">Date</div>
+    <div class="col-md-1 font-weight-bold">Client</div>
+    <div class="col-md-1 font-weight-bold">Status</div>
+    <div class="col-md-1 font-weight-bold">Sent</div>
+    <div class="col-md-1 font-weight-bold">Check#</div>
+    <div class="col-md-2 font-weight-bold">Date Paid</div>
+    <div class="col-md-1 font-weight-bold text-right">Hours</div>
+    <div class="col-md-1 font-weight-bold text-right">Amount</div>    
+</div>
+
+<form action='#'>
+    {% for item in items %}
+    <div class="row no-gutters">
+        <div class="col-md-1">
+            {{ item._id }}
+        </div>
+        <div class="col-md-1">
+            {% if item.close_date %}
+            {{ item.close_date.strftime('%m/%d/%Y') }}
+            {% else %}
+            {{ item.date.strftime('%m/%d/%Y') }}
+            {% endif %}
+        </div>
+        <div class="col-md-1">
+            {{ '%2d'|format(item.client) }}
+        </div>
+        <div class="col-md-1 text-center">
+            {{ item.status }}
+        </div>
+        <div class="col-md-1 text-center">
+            {{ item.sent }}
+        </div>
+        <div class="col-md-1">
+            {{ item.check_number }}
+        </div>
+        <div class="col-md-2">
+            {% if item.paid_date %}
+            {{ item.paid_date.strftime('%m/%d/%Y') }}
+            {% endif %}
+        </div>
+        <div class="col-md-1 text-right">
+            {{ '%5.2f'|format(item.hours) }}
+        </div>
+        <div class="col-md-1 text-right">
+            {{ '%5.2f'|format(item.amount) }}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="row no-gutters">
+        <div class="col-md-1 offset-7 font-weight-bold">
+            Total
+        </div>
+        <div class="col-md-1 text-right font-weight-bold">
+            {{ '%5.2f'|format(totals.Hours) }}
+        </div>
+        <div class="col-md-1 text-right font-weight-bold">
+            {{ '%5.2f'|format(totals.Amount) }}
+        </div>
+    </div>
+</form>
+
+{% endblock %}

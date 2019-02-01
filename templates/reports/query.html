@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row no-gutters">
+    <div class="col-md-11">
+        <h2>Search Invoices</h2>
+    </div>
+</div>
+
+<form action="{{ url_for('get_report') }}" method='POST'>
+    <div class="row no-gutters">
+        <div class="col-md-2">
+            Start date:
+            <input type="text" size="7" id="datepicker" name="start_date">
+        </div>
+        <div class="col-md-2">
+            End date:
+            <input type="text" size="7" id="datepicker2" name="end_date">
+        </div>
+    </div>
+    <div class="row no-gutters">
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+{% endblock %}

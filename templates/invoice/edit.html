@@ -35,21 +35,24 @@
 {% endfor %}
 
 <div class="row no-gutters mt-2 text-right">
-<a class="btn btn-primary mr-2" role="button" href="{{ url_for('invoice_list')}}">Return to list</a>
-{% if invoice.sent == '' %}
-<form action="{{ url_for('invoice_post', invoice_id=invoice._id) }}" method="POST">
-    <button type="submit" name="sent" class="btn btn-info mr-2">Mark as sent</button>
-</form>
-{% endif %}
-{% if invoice.status == 'open' %}
-<a class="btn btn-success mr-2" role="button" href="{{ url_for('invoice_close', invoice_id=invoice._id)}}">Close this
-    invoice</a>
-{% elif invoice.status =='closed' %}
-<a class="btn btn-warning mr-2" role="button" href="{{ url_for('invoice_post', invoice_id=invoice._id)}}">Post payment</a>
-{% else %}
-<a class="btn btn-info" role="button" href="{{ url_for('invoice_open', invoice_id=invoice._id)}}">Reopen this
-    invoice</a>
-{% endif %}
+    <a class="btn btn-primary mr-2" role="button" href="{{ url_for('invoice_list')}}">Return to list</a>
+
+    {% if invoice.status == 'open' %}
+    <a class="btn btn-success mr-2" role="button" href="{{ url_for('invoice_close', invoice_id=invoice._id)}}">Close
+        this invoice</a>
+    {% elif invoice.status =='closed' %}
+        {% if invoice.sent == '' %}
+        <form action="{{ url_for('invoice_post', invoice_id=invoice._id) }}" method="POST">
+            <button type="submit" name="sent" class="btn btn-info mr-2">Mark as sent</button>
+        </form>
+        {% else %}
+            <a class="btn btn-warning mr-2" role="button" href="{{ url_for('invoice_post', invoice_id=invoice._id)}}">Post
+        payment</a>
+        {% endif %}
+    {% else %}
+        <a class="btn btn-info" role="button" href="{{ url_for('invoice_open', invoice_id=invoice._id)}}">Reopen this
+        invoice</a>
+    {% endif %}
 
 </div>
 

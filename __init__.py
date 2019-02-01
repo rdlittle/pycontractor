@@ -27,3 +27,4 @@ def iconv_date(value, format='%m/%d/%Y'):
 from contractor.timesheet import views
 from contractor.invoice import views
 from contractor.site import views
+from contractor.reports import views

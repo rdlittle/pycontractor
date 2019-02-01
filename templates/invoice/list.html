@@ -58,13 +58,13 @@
             {{ item.paid_date.strftime('%m/%d/%Y') }}
         {% endif %}
     </div>
-    <div class="col-md-1">
+    <div class="col-md-1 text-right">
         <a href="{{ url_for('invoice_edit',invoice_id=item._id) }}">Edit</a>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-1 text-right">
         <a href="{{ url_for('invoice_view',invoice_id=item._id,action='view') }}">View</a>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-1 text-right">
         <a href="{{ url_for('invoice_view',invoice_id=item._id,action='print') }}">Print</a>
     </div>      
 </div>
