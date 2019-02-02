@@ -51,11 +51,14 @@ def invoice_post(invoice_id):
 
 @app.route('/invoice_close/<int:invoice_id>', methods=('GET', 'POST'))
 def invoice_close(invoice_id):
+    
     if 'cancel' in request.form:
         return redirect(url_for('invoice_list'))
 
     if request.method == 'GET':
         invoice = db.invoice.find_one({'_id': invoice_id})
+        if invoice['close_date'] == '':
+            invoice['close_date'] =datetime.now()
         return render_template('invoice/close.html', invoice=invoice)
     
     invoice = db.invoice.find_one({'_id': invoice_id})
