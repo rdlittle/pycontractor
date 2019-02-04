@@ -2,8 +2,24 @@
 
 {% block content %}
 <div class="row no-gutters mb-2">
-    <div class="col-md-8">
+    <div class="col-md-4">
         <h2>Invoice Listing</h2>
+    </div>
+    <div class="col-md-4">
+        <nav>
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="{{ url_for('invoice_list', page_number=1) }}">&lt;&lt;</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('invoice_list', page_number=page_number-1) }}">&lt;</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('invoice_list', page_number=page_number+1) }}">{{
+                        page_number+1}}</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('invoice_list', page_number=page_number+2) }}">{{
+                        page_number+2}}</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('invoice_list', page_number=page_number+3) }}">{{
+                        page_number+3}}</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('invoice_list', page_number=page_number+1) }}">&gt;</a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('invoice_list', page_number=page_count+1)}}">&gt;&gt;</a></li>
+            </ul>
+        </nav>
     </div>
     <div class="col-md-4 text-right">
         <form action={{ url_for('invoice_create')}} method="GET">
@@ -30,9 +46,9 @@
     </div>
     <div class="col-md-1">
         {% if item.close_date %}
-            {{ item.close_date.strftime('%m/%d/%Y') }}
+        {{ item.close_date.strftime('%m/%d/%Y') }}
         {% else %}
-            {{ item.date.strftime('%m/%d/%Y') }}
+        {{ item.date.strftime('%m/%d/%Y') }}
         {% endif %}
     </div>
     <div class="col-md-1">
@@ -49,13 +65,13 @@
     </div>
     <div class="col-md-1">
         {{ item.sent }}
-    </div>    
+    </div>
     <div class="col-md-1">
         {{ item.check_number }}
     </div>
     <div class="col-md-1">
         {% if item.paid_date %}
-            {{ item.paid_date.strftime('%m/%d/%Y') }}
+        {{ item.paid_date.strftime('%m/%d/%Y') }}
         {% endif %}
     </div>
     <div class="col-md-1 text-right">
@@ -66,7 +82,8 @@
     </div>
     <div class="col-md-1 text-right">
         <a href="{{ url_for('invoice_view',invoice_id=item._id,action='print') }}">Print</a>
-    </div>      
+    </div>
 </div>
 {% endfor %}
+
 {% endblock %}

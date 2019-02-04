@@ -11,8 +11,17 @@ import pdfkit
 @app.route('/')
 @app.route('/invoice_list')
 def invoice_list():
-    items = db.invoice.find().sort('date', DESCENDING)
-    return render_template('/invoice/list.html', items=items)
+    page_number = 1
+    if request.args.get('page_number'):
+        page_number = int(request.args.get('page_number'))
+
+    invoice_count = db.invoice.count()
+    page_size = 20
+    page_count = int(invoice_count / page_size)
+
+    items = db.invoice.find().skip(
+        (page_number - 1) * page_size).limit(page_size).sort('date', DESCENDING)
+    return render_template('/invoice/list.html', items=items, item_count=invoice_count, page_number=page_number, page_size=page_size, page_count=page_count)
 
 
 @app.route('/invoice_post/<int:invoice_id>', methods=('GET', 'POST'))
@@ -25,7 +34,7 @@ def invoice_post(invoice_id):
 
     if request.method == 'GET':
         return render_template('invoice/post.html', invoice=invoice)
-    
+
     if 'sent' in request.form:
         db.invoice.update_one({'_id': invoice_id}, {'$set': {'sent': 'Y'}})
         return redirect(url_for('invoice_list'))
@@ -34,12 +43,13 @@ def invoice_post(invoice_id):
         if request.form['date'] == '':
             flash('Received date is required', category='error')
         else:
-            invoice['paid_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
+            invoice['paid_date'] = datetime.strptime(
+                request.form['date'], '%m/%d/%Y')
         if request.form['check_number'] == '':
             flash('Check number is required', category='error')
         else:
             invoice['check_number'] = request.form['check_number']
-        return render_template('invoice/post.html',invoice_id=invoice_id, invoice=invoice)
+        return render_template('invoice/post.html', invoice_id=invoice_id, invoice=invoice)
 
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['check_number'] = request.form['check_number']
@@ -51,16 +61,16 @@ def invoice_post(invoice_id):
 
 @app.route('/invoice_close/<int:invoice_id>', methods=('GET', 'POST'))
 def invoice_close(invoice_id):
-    
+
     if 'cancel' in request.form:
         return redirect(url_for('invoice_list'))
 
     if request.method == 'GET':
         invoice = db.invoice.find_one({'_id': invoice_id})
         if invoice['close_date'] == '':
-            invoice['close_date'] =datetime.now()
+            invoice['close_date'] = datetime.now()
         return render_template('invoice/close.html', invoice=invoice)
-    
+
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['status'] = 'closed'
     invoice['close_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
@@ -144,7 +154,7 @@ def invoice_view(invoice_id):
         }
 
         inv_date = invoice['date'].strftime('%Y%m%d')
-        
+
         if 'close_date' in invoice:
             if invoice['close_date']:
                 inv_date = invoice['close_date'].strftime('%Y%m%d')
