@@ -85,7 +85,7 @@ def invoice_open(invoice_id):
 
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['status'] = 'open'
-    invoice['closed_date'] = ''
+    invoice['close_date'] = ''
     db.invoice.update({'_id': invoice_id}, invoice)
     return redirect(url_for('invoice_edit', invoice_id=invoice_id))
 
@@ -120,7 +120,7 @@ def invoice_create():
     invoice['status'] = 'open'
     invoice['check_number'] = ''
     invoice['period'] = next_sequence('period')
-    invoice['closed_date'] = ''
+    invoice['close_date'] = ''
     invoice['posted'] = False
     invoice['sent'] = ''
     db.invoice.insert_one(invoice)
