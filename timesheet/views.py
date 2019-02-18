@@ -64,7 +64,8 @@ def timesheet_create(invoice_id):
             return render_template(url_for('entry'))
 
         entry['_id'] = next_sequence('timesheet')
-        entry['date'] = datetime.strptime(request.form['date'],'%M/%d/%Y')
+        pdb.set_trace()
+        entry['date'] = datetime.strptime(request.form['date'],'%m/%d/%Y')
         entry['description'] = request.form['description']
         entry['hours'] = float(request.form['hours'])
         db.timesheet.insert_one(entry)
