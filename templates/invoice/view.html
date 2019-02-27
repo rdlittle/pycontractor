@@ -122,16 +122,16 @@
             </tr>
             {% endfor %}
             <tr>
-                <td colspan="2" style="text-align: right;border-top: thin solid black;">Total hours</td>
+                <td colspan="2" style="text-align: right;border-top: thin solid black; padding-right: 2em;">Total hours</td>
                 <td style="text-align: right; border-top: thin solid black;">{{ '%3.2f'|format(invoice.hours) }}</td>
             </tr>
             <tr>
-                <td colspan="2" style="text-align: right;">Rate</td>
-                <td style="text-align: right;">50.00</td>
+                <td colspan="2" style="text-align: right; padding-right: 2em;">Rate</td>
+                <td style="text-align: right;">$50.00</td>
             </tr>        
             <tr>
-                <td colspan="2" style="text-align: right;">Invoice Total</td>
-                <td style="text-align: right;">{{ '%5.2f'|format(invoice.amount) }}</td>
+                <td colspan="2" style="text-align: right; padding-right: 2em;">Invoice Total</td>
+                <td style="text-align: right;">{{ '$%5.2f'|format(invoice.amount) }}</td>
             </tr>                
         </table>
         {% if action == 'view' %}
