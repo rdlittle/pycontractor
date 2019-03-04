@@ -69,10 +69,10 @@ def timesheet_create(invoice_id):
         entry['hours'] = float(request.form['hours'])
 
         invoice = db.invoice.find_one({'_id': invoice_id})
+        #pdb.set_trace()
         invoice['hours'] += float(entry['hours'])
         invoice['amount'] = float(invoice['hours'] * 50)
+        db.invoice.replace_one({'_id': invoice_id}, invoice, True)
         db.invoice.update({'_id': invoice_id}, { '$push': {'detail': entry}})
-        #  Leave this line commented out because I'm not yet sure it is needed
-        #db.invoice.replace_one({'_id': invoice_id}, invoice, True)
 
     return redirect(url_for('invoice_edit',invoice_id=invoice_id))
