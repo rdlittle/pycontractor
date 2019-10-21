@@ -11,7 +11,7 @@ manager.add_command("runserver", Server(
     use_debugger = True,
     use_reloader = True,
     host = 'mustang.littleacres.lan',
-    port = int(os.getenv('PORT', 5000))
+    port = int(os.getenv('PORT', 5050))
 ))
 
 if __name__ == '__main__':
