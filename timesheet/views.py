@@ -79,6 +79,7 @@ def timesheet_edit(inv_id, tsid):
     for ts in invoice['detail']:
         invoice['hours'] += float(ts['hours'])
 
+    invoice['amount'] = float(invoice['hours'] * 50)
     db.invoice.replace_one({'_id': inv_id}, invoice, True)
 
     return redirect(url_for('invoice_edit',invoice_id=inv_id))
