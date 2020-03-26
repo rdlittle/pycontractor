@@ -10,7 +10,7 @@ manager = Manager(app)
 manager.add_command("runserver", Server(
     use_debugger = True,
     use_reloader = True,
-    host = 'mustang.littleacres.lan',
+    host = 'localhost',
     port = int(os.getenv('PORT', 5050))
 ))
 
