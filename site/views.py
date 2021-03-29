@@ -116,6 +116,7 @@ def client_edit(client_id=None):
     cust['phone'] = request.form['phone']
     cust['email'] = request.form['email']
     cust['rate'] = request.form['rate']
+    cust['prefix'] = request.form['prefix']
 
     if is_new:
         db.clients.insert(cust)
@@ -138,6 +139,7 @@ def client_view(client_id):
     form['phone'] = cl.phone
     form['email'] = cl.email
     form['attn'] = cl.attn
+    form['prefix'] = cl.prefix
     return render_template('site/client_view.html', headline="Client View", form=form)
 
 @app.route('/client_list')

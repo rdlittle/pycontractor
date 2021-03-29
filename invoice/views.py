@@ -18,7 +18,7 @@ def invoice_list():
     invoice_count = db.invoice.count()
     page_size = 20
     page_count = int(invoice_count / page_size)
-
+    
     items = db.invoice.find().skip(
         (page_number - 1) * page_size).limit(page_size).sort('date', DESCENDING)
     return render_template('/invoice/list.html', items=items, item_count=invoice_count, page_number=page_number, page_size=page_size, page_count=page_count)
@@ -106,8 +106,9 @@ def invoice_create():
     if 'cancel' in request.form:
         return redirect(url_for('invoice_list'))
 
+    clients = db.clients.find()
     if request.method == 'GET':
-        return render_template('invoice/create.html')
+        return render_template('invoice/create.html', clients=clients)
 
     invoice = {}
 
@@ -159,7 +160,7 @@ def invoice_view(invoice_id):
             if invoice['close_date']:
                 inv_date = invoice['close_date'].strftime('%Y%m%d')
 
-        file_name = 'MA-'+inv_date+'-'+str(invoice['_id'])+".pdf"
+        file_name = '{}-{}-{}.pdf'.format(client_rec['prefix'], inv_date, str(invoice['_id']))
         _invoice = render_template('invoice/view.html', invoice=invoice,
                                    date=today, company=company, client=client_rec, action=action)
         _sheet = pdfkit.from_string(_invoice, False, options=options)

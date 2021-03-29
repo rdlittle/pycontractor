@@ -66,9 +66,13 @@
 
         <div class="row no-gutters mb-2">
             <div class="col-md-2">Email</div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <input type="text" name="email" value="{{ client.email }}" style="width: 100%;">
             </div>
+            <div class="col-md-2 pl-2">Invoice prefix</div>
+            <div class="col-md-1">
+                <input type="text" name="prefix" value="{{ client.prefix }}" style="width: 50%;">
+            </div>            
         </div>
 
         <div class="row no-gutters mb-2">
