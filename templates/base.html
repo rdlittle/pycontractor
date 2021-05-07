@@ -29,6 +29,26 @@
             $('#datepicker2').datepicker();
             $("#menu").menu();
         });
+
+        $(document).ready(function(){
+            $( '#client_id' ).change(function(){
+                var optionText = $("#client_id option:selected").val();
+                $("#invoices").empty();
+                $.ajax({ 
+                    type:'get', 
+                    url:'/invoice_list?client_id='+optionText, 
+                    cache:false, 
+                    async:'asynchronous', 
+                    dataType:'json', 
+                    success: function(data) { 
+                        alert(optionText);
+                    }, 
+                    error: function(request, status, error) { 
+                        console.log("Error: " + error) 
+                    } 
+                }); 
+            });
+        });
     </script>
 
 </head>
