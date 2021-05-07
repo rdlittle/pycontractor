@@ -27,7 +27,6 @@ def timesheet_delete(invoice_id, tsid):
         """ this removes the correct element in the mongo shell
         db.invoice.updateOne({_id: 378}, {$pull: {detail: {'_id': 2782}}})
         """
-        #pdb.set_trace()
         #db.invoice.update_one({'_id': invoice_id}, {
         #    '$pull': {'detail': {'_id': tsid}},
         #    '$set': {'hours': inv['hours'], 'amount': inv['amount']}
@@ -79,7 +78,12 @@ def timesheet_edit(inv_id, tsid):
     for ts in invoice['detail']:
         invoice['hours'] += float(ts['hours'])
 
-    invoice['amount'] = float(invoice['hours'] * 50)
+    
+    if 'rate' not in invoice.keys():
+        rate = db.rates.find_one({'_id': invoice['client']})['rate']
+        invoice['rate'] = rate
+    
+    invoice['amount'] = float(invoice['hours'] * invoice['rate'])    
     db.invoice.replace_one({'_id': inv_id}, invoice, True)
 
     return redirect(url_for('invoice_edit',invoice_id=inv_id))
@@ -102,9 +106,12 @@ def timesheet_create(invoice_id):
         entry['hours'] = float(request.form['hours'])
 
         invoice = db.invoice.find_one({'_id': invoice_id})
-        #pdb.set_trace()
+        if 'rate' not in invoice.keys():
+            rate = db.rates.find_one({'_id': invoice['client']})['rate']
+            invoice['rate'] = rate
+            
         invoice['hours'] += float(entry['hours'])
-        invoice['amount'] = float(invoice['hours'] * 50)
+        invoice['amount'] = float(invoice['hours'] * invoice['rate'])
         db.invoice.replace_one({'_id': invoice_id}, invoice, True)
         db.invoice.update({'_id': invoice_id}, { '$push': {'detail': entry}})
 
