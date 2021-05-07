@@ -21,11 +21,20 @@
             </ul>
         </nav>
     </div>
-    <div class="col-md-4 text-right">
+    
+    <div class="col-md-2">
+        <select class="form-control" id="client_id" name="client_id"}} >
+            {% for client in clients %}
+                <option value={{ client._id }}>{{ client.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2 text-right">
         <form action={{ url_for('invoice_create')}} method="GET">
             <button type="submit" class="btn btn-lg btn-primary">New Invoice</button>
         </form>
     </div>
+
 </div>
 
 <div class="row">
@@ -40,7 +49,7 @@
     <div class="col-md-2 font-weight-bold">Date Paid</div>
 </div>
 {% for item in items %}
-<div class="row">
+<div class="row" id="invoices">
     <div class="col-md-1">
         {{ item._id }}
     </div>
