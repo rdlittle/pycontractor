@@ -9,19 +9,26 @@ import pdfkit
 
 
 @app.route('/')
-@app.route('/invoice_list')
+@app.route('/invoice_list', methods=('GET', 'POST'))
 def invoice_list():
     page_number = 1
+    filter = {}
     if request.args.get('page_number'):
         page_number = int(request.args.get('page_number'))
+    if request.args.get('client_id'):
+        client_id = request.args.get('client_id')
+        filter = {'client': int(client_id)}
 
-    invoice_count = db.invoice.count()
+    invoice_count = db.invoice.count(filter)
+    clients = db.clients.find()
     page_size = 20
     page_count = int(invoice_count / page_size)
     
-    items = db.invoice.find().skip(
+    items = db.invoice.find(filter).skip(
         (page_number - 1) * page_size).limit(page_size).sort('date', DESCENDING)
-    return render_template('/invoice/list.html', items=items, item_count=invoice_count, page_number=page_number, page_size=page_size, page_count=page_count)
+    return render_template('/invoice/list.html', items=items, clients=clients,
+                           item_count=invoice_count, page_number=page_number, 
+                           page_size=page_size, page_count=page_count)
 
 
 @app.route('/invoice_post/<int:invoice_id>', methods=('GET', 'POST'))
@@ -111,11 +118,14 @@ def invoice_create():
         return render_template('invoice/create.html', clients=clients)
 
     invoice = {}
+    client_id = int(request.form['client_id'])
+    client_rec = db.clients.find_one({'_id': client_id})
+    rate = db.rates.find_one(client_rec['rate'])
 
     invoice['_id'] = next_sequence('invoice')
     invoice['date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
     invoice['hours'] = float(0)
-    invoice['client'] = int(request.form['client_id'])
+    invoice['client'] = client_id
     invoice['amount'] = float(0)
     invoice['detail'] = []
     invoice['status'] = 'open'
@@ -124,6 +134,9 @@ def invoice_create():
     invoice['close_date'] = ''
     invoice['posted'] = False
     invoice['sent'] = ''
+    if 'rate' not in invoice.keys():
+        invoice['rate'] = rate['rate']
+    
     db.invoice.insert_one(invoice)
     return redirect(url_for('invoice_list'))
 
@@ -135,6 +148,8 @@ def invoice_view(invoice_id):
     invoice = db.invoice.find_one({'_id': invoice_id})
     client_rec = db.clients.find_one({'_id': invoice['client']})
     company = db.company.find_one({'_id': 1})
+    rate = db.rates.find_one({'_id': int(client_rec['rate'])})
+    invoice['rate'] = rate['rate']
 
     action = request.args['action']
 
@@ -155,6 +170,7 @@ def invoice_view(invoice_id):
         }
 
         inv_date = invoice['date'].strftime('%Y%m%d')
+        invoice['rate'] = rate['rate']
 
         if 'close_date' in invoice:
             if invoice['close_date']:
