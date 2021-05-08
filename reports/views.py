@@ -37,6 +37,6 @@ def get_report():
             }
         }]
 
-    invoice_list = db.invoice.aggregate(invoice_query)
+    invoices = db.invoice.aggregate(invoice_query)
     totals = db.invoice.aggregate(pipeline2).next()
-    return render_template('/reports/results.html', items=invoice_list, totals=totals)
+    return render_template('/reports/results.html', items=invoices, totals=totals)
