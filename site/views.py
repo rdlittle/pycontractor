@@ -58,7 +58,6 @@ def company_edit(company_id):
     if request.method == 'GET':
         company = db.company.find_one({'_id': company_id})
         return render_template('site/company.html',company=company,action='edit',states=get_states())
-
     company = {}
     company['_id'] = company_id
     company['name'] = request.form['name']

@@ -66,7 +66,7 @@
 
         <table style="width: 100%;"">
             <tr>
-                <td style=" width: 65%;">
+                <td style=" width: 55%;">
             <table>
                 <tr>
                     <td class="pr-3">
@@ -81,7 +81,7 @@
                 {% if client.address2 != "" %}
                 <tr>
                     <td class="pr-3"></td>
-                    <td>{{ client.address1 }}</td>
+                    <td>{{ client.address2 }}</td>
                 </tr>
                 {% endif %}
                 <tr>
@@ -97,6 +97,10 @@
             <td>
                 <table style="width: 100%;">
                     <tr>
+                        <td class="pr-3">Invoice #</td>
+                        <td class="text-right pr-2">{{ invoice._id }}</td>
+                    </tr>
+                    <tr>
                         <td class="pr-3">Invoice date</td>
                         {% if invoice.close_date %}
                             <td class="text-right pr-2">{{ invoice.close_date.strftime('%m/%d/%Y') }}</td>
@@ -105,8 +109,9 @@
                         {% endif %}
                     </tr>
                     <tr>
-                        <td class="pr-3">Invoice #</td>
-                        <td class="text-right pr-2">{{ invoice._id }}</td>
+                        <td class="pr-3">Period</td>
+                        <td class="text-right pr-2">{{ invoice.date.strftime('%m/%d/%Y') }} 
+                            to {{ invoice.close_date.strftime('%m/%d/%Y') }}</td>
                     </tr>
                 </table>
             </td>
