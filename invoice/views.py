@@ -120,7 +120,7 @@ def invoice_create():
     invoice = {}
     client_id = int(request.form['client_id'])
     client_rec = db.clients.find_one({'_id': client_id})
-    rate = db.rates.find_one(client_rec['rate'])
+    rate = db.rates.find_one(int(client_rec['rate']))
 
     invoice['_id'] = next_sequence('invoice')
     invoice['date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
@@ -134,8 +134,7 @@ def invoice_create():
     invoice['close_date'] = ''
     invoice['posted'] = False
     invoice['sent'] = ''
-    if 'rate' not in invoice.keys():
-        invoice['rate'] = rate['rate']
+    invoice['rate'] = rate['rate']
     
     db.invoice.insert_one(invoice)
     return redirect(url_for('invoice_list'))
