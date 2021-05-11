@@ -21,12 +21,17 @@ def invoice_list():
 
     invoice_count = db.invoice.count(filter)
     clients = db.clients.find()
+    
+    clist = {}
+    for client in clients:
+        clist[client['_id']] = client['name']
+        
     page_size = 20
     page_count = int(invoice_count / page_size)
     
     items = db.invoice.find(filter).skip(
         (page_number - 1) * page_size).limit(page_size).sort('date', DESCENDING)
-    return render_template('/invoice/list.html', items=items, clients=clients,
+    return render_template('/invoice/list.html', items=items, clients=clist,
                            item_count=invoice_count, page_number=page_number, 
                            page_size=page_size, page_count=page_count)
 
