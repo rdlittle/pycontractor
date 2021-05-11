@@ -22,14 +22,7 @@
         </nav>
     </div>
     
-    <div class="col-md-2">
-        <select class="form-control" id="client_id" name="client_id"}} >
-            {% for client in clients %}
-                <option value={{ client._id }}>{{ client.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="col-md-2 text-right">
+    <div class="col-md-4 text-right">
         <form action={{ url_for('invoice_create')}} method="GET">
             <button type="submit" class="btn btn-lg btn-primary">New Invoice</button>
         </form>
@@ -38,9 +31,9 @@
 </div>
 
 <div class="row">
-    <div class="col-md-1 font-weight-bold">Invoice#</div>
+    <div class="col-md-1 font-weight-bold">Inv#</div>
     <div class="col-md-1 font-weight-bold">Date</div>
-    <div class="col-md-1 font-weight-bold">Client</div>
+    <div class="col-md-2 font-weight-bold">Client</div>
     <div class="col-md-1 font-weight-bold text-right">Hours</div>
     <div class="col-md-1 font-weight-bold text-right">Amount</div>
     <div class="col-md-1 font-weight-bold">Status</div>
@@ -60,8 +53,8 @@
         {{ item.date.strftime('%m/%d/%Y') }}
         {% endif %}
     </div>
-    <div class="col-md-1">
-        {{ '%2d'|format(item.client) }}
+    <div class="col-md-2">
+        {{ clients[item.client] }}
     </div>
     <div class="col-md-1 number">
         {{ item.hours }}
@@ -89,9 +82,7 @@
     <div class="col-md-1 text-right">
         <a href="{{ url_for('invoice_view',invoice_id=item._id,action='view') }}">View</a>
     </div>
-    <div class="col-md-1 text-right">
-        <a href="{{ url_for('invoice_view',invoice_id=item._id,action='print') }}">Print</a>
-    </div>
+
 </div>
 {% endfor %}
 
