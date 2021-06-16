@@ -3,3 +3,4 @@ DEBUG = True
 DATABASE = 'dev_contractor'
 DB_HOST = 'localhost'
 DB_PORT = 27017
+DB_TYPE = 'mongodb'
