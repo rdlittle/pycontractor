@@ -167,7 +167,9 @@ def invoice_view(invoice_id):
     if action == 'print':
         if invoice['close_date'] == '':
             flash('Invoice must first be closed')
-            return render_template('invoice/view.html', invoice=invoice, date=today, company=company, client=client_rec, action='view')
+            return render_template('invoice/view.html', 
+                                   invoice=invoice, date=today, company=company, 
+                                   client=client_rec, action='view')
         options = {
             'page-size': 'Letter',
             'margin-left': '0.75in',
