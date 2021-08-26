@@ -26,7 +26,7 @@ def mv_readnext(list_name):
     Provides a 'readnext' function to simulate a pick-style readnext
     """
     for attr in list_name:
-        yield list_name[row]
+        yield list_name[attr]
 
 def mv_to_list(dyn_array):
     """
