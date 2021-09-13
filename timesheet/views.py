@@ -77,14 +77,13 @@ def timesheet_edit(inv_id, tsid):
     invoice['hours'] = 0
     for ts in invoice['detail']:
         invoice['hours'] += float(ts['hours'])
-
     
     if 'rate' not in invoice.keys():
         rate = db.rates.find_one({'_id': invoice['client']})['rate']
         invoice['rate'] = rate
     
     invoice['amount'] = float(invoice['hours'] * invoice['rate'])    
-    invoice['detail'].sort(key=lambda ts : ts['date'].strftime('%Y%m%d'), reverse=False)
+    invoice['detail'] = sorted(invoice['detail'], key = lambda k: k['date'])
     db.invoice.replace_one({'_id': inv_id}, invoice, True)
 
     return redirect(url_for('invoice_edit',invoice_id=inv_id))
@@ -113,6 +112,7 @@ def timesheet_create(invoice_id):
             
         invoice['hours'] += float(entry['hours'])
         invoice['amount'] = float(invoice['hours'] * invoice['rate'])
+        invoice['detail'] = sorted(invoice['detail'], key = lambda k: k['date'])
         db.invoice.replace_one({'_id': invoice_id}, invoice, True)
         db.invoice.update({'_id': invoice_id}, { '$push': {'detail': entry}})
 
