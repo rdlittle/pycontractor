@@ -184,6 +184,9 @@ def invoice_view(invoice_id):
         if 'close_date' in invoice:
             if invoice['close_date']:
                 inv_date = invoice['close_date'].strftime('%Y%m%d')
+                
+        if len(invoice['detail']) > 0:
+            invoice['detail'] = sorted(invoice['detail'], key = lambda k: k['date'])
 
         file_name = '{}-{}-{}.pdf'.format(client_rec['prefix'], inv_date, str(invoice['_id']))
         _invoice = render_template('invoice/view.html', invoice=invoice,
