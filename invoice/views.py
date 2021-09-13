@@ -110,6 +110,7 @@ def invoice_delete(invoice_id):
 @app.route('/invoice_edit/<int:invoice_id>')
 def invoice_edit(invoice_id):
     invoice = db.invoice.find_one({'_id': invoice_id})
+    invoice['detail'] = sorted(invoice['detail'], key = lambda k: k['date'])
     return render_template('/invoice/edit.html', invoice=invoice)
 
 
