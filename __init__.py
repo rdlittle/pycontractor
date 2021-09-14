@@ -24,7 +24,7 @@ def oconv_date(value, format='%m/%d/%Y'):
 def iconv_date(value, format='%m/%d/%Y'):
     return datetime.datetime.strptime(value,format)
 
-from contractor.timesheet import views
-from contractor.invoice import views
-from contractor.site import views
-from contractor.reports import views
+from .timesheet import views
+from .invoice import views
+from .site import views
+from .reports import views
