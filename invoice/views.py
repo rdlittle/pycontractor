@@ -1,4 +1,4 @@
-from contractor import app, client, db, next_sequence
+from .. import app, client, db, next_sequence
 from flask import flash, redirect, render_template, url_for, session, request, make_response
 import pdb
 from timesheet.model import TimeSheet
@@ -148,7 +148,8 @@ def invoice_create():
 
 @app.route('/invoice_view/<int:invoice_id>', methods=['GET'])
 def invoice_view(invoice_id):
-
+    import pdb
+    
     today = datetime.now().strftime('%m/%d/%Y')
     invoice = db.invoice.find_one({'_id': invoice_id})
     client_rec = db.clients.find_one({'_id': invoice['client']})
@@ -166,7 +167,7 @@ def invoice_view(invoice_id):
     args['company'] = company
 
     if action == 'print':
-        if invoice['close_date'] == '':
+        if invoice['status'] == 'open':
             flash('Invoice must first be closed')
             return render_template('invoice/view.html', 
                                    invoice=invoice, date=today, company=company, 
