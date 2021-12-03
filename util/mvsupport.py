@@ -12,6 +12,7 @@ Defines constant multi-value data markers:
 """
 import os
 import re
+import datetime
 
 FM = '\xfe'
 AM = '\xfe'
@@ -59,5 +60,4 @@ def mv_lower(dynarray):
     dynarray = re.sub(VM,SVM,dynarray)
     dynarray = re.sub(AM,VM,dynarray)
     return dynarray
-
 
