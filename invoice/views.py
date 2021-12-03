@@ -7,6 +7,19 @@ from bson import ObjectId
 from datetime import datetime
 import pdfkit
 
+def recalc(invoice):
+    invoice['hours'] = 0
+    invoice['amount'] = 0
+    for ts in invoice['detail']:
+        invoice['hours'] += float(ts['hours'])
+    
+    if 'rate' not in invoice.keys():
+        rate = db.rates.find_one({'_id': invoice['client']})['rate']
+        invoice['rate'] = rate
+    
+    invoice['amount'] = float(invoice['hours'] * invoice['rate'])
+    return invoice
+     
 
 @app.route('/')
 @app.route('/invoice_list', methods=('GET', 'POST'))
@@ -109,6 +122,9 @@ def invoice_delete(invoice_id):
 
 @app.route('/invoice_edit/<int:invoice_id>')
 def invoice_edit(invoice_id):
+    """
+    Reads back the invoice and sorts the detail by date
+    """
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['detail'] = sorted(invoice['detail'], key = lambda k: k['date'])
     return render_template('/invoice/edit.html', invoice=invoice)
