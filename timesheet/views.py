@@ -4,8 +4,9 @@ from bson import ObjectId
 from datetime import datetime
 from flask import redirect, render_template, request, session, url_for
 from pymongo import ASCENDING, DESCENDING
-from contractor import app, client, db, next_sequence
+from .. import app, client, db, next_sequence
 from timesheet.model import TimeSheet
+from ..invoice.views import recalc
 
 @app.route('/timesheet')
 def timesheet_list():
@@ -16,31 +17,19 @@ def timesheet_list():
 @app.route('/delete/<int:invoice_id>/<int:tsid>', methods=['GET'])
 def timesheet_delete(invoice_id, tsid):
     invoice = db.invoice.find_one({'_id': invoice_id})
+    import pdb
+    
     if invoice:
-        # Like: db.invoice.find({_id: 378},{'detail': {$elemMatch: {'_id': 2776}}})
-        # ts = db.invoice.find_one({'_id': invoice_id}, {'detail': {'$elemMatch': {'_id': tsid}}})
-        # hours = float(ts['detail'][0]['hours'])
-        # inv = db.invoice.find_one({'_id': invoice_id})
-        # inv['hours'] -= hours
-        # inv['amount'] = float(inv['hours']) * 50.00
-
-        """ this removes the correct element in the mongo shell
-        db.invoice.updateOne({_id: 378}, {$pull: {detail: {'_id': 2782}}})
-        """
-        #db.invoice.update_one({'_id': invoice_id}, {
-        #    '$pull': {'detail': {'_id': tsid}},
-        #    '$set': {'hours': inv['hours'], 'amount': inv['amount']}
-        #    })
-
-        qry = {'_id': invoice_id}
-        upd = {'$pull': {'detail': {'_id': tsid}}}
-        db.invoice.update_one(qry,upd)
-
-        invoice = db.invoice.find_one({'_id': invoice_id})
-        hours = 0
+        det = []
+        invoice['hours'] = 0
         for ts in invoice['detail']:
-            hours += float(ts['hours'])
-        db.invoice.update_one({'_id': invoice_id}, {'$set': {'hours': hours}})
+            if ts['_id'] != tsid:
+                det.append(ts)
+                invoice['hours'] += float(ts['hours'])
+        invoice['detail'].clear()
+        #pdb.set_trace()
+        invoice['detail'] = det.copy()
+        db.invoice.replace_one({'_id': invoice_id}, invoice)
 
     return redirect( url_for('invoice_edit',invoice_id=invoice_id))
 
@@ -69,21 +58,15 @@ def timesheet_edit(inv_id, tsid):
 
     if request.method == 'GET':
         return render_template('timesheet/edit.html',invoice_id=inv_id,item=ts)
-    ts['date'] = datetime.strptime(request.form['date'],'%m/%d/%Y')
-    ts['description'] = request.form['description']
-    ts['hours'] = request.form['hours']
-
-    invoice['detail'][ts_index] = ts
-    invoice['hours'] = 0
-    for ts in invoice['detail']:
-        invoice['hours'] += float(ts['hours'])
     
-    if 'rate' not in invoice.keys():
-        rate = db.rates.find_one({'_id': invoice['client']})['rate']
-        invoice['rate'] = rate
+    if 'delete_button' not in request.form:
+        ts['date'] = datetime.strptime(request.form['date'],'%m/%d/%Y')
+        ts['description'] = request.form['description']
+        ts['hours'] = request.form['hours']
+        invoice['detail'][ts_index] = ts
     
-    invoice['amount'] = float(invoice['hours'] * invoice['rate'])    
-    invoice['detail'] = sorted(invoice['detail'], key = lambda k: k['date'])
+    invoice = recalc(invoice)    
+    
     db.invoice.replace_one({'_id': inv_id}, invoice, True)
 
     return redirect(url_for('invoice_edit',invoice_id=inv_id))
@@ -106,14 +89,10 @@ def timesheet_create(invoice_id):
         entry['hours'] = float(request.form['hours'])
 
         invoice = db.invoice.find_one({'_id': invoice_id})
-        if 'rate' not in invoice.keys():
-            rate = db.rates.find_one({'_id': invoice['client']})['rate']
-            invoice['rate'] = rate
-            
-        invoice['hours'] += float(entry['hours'])
-        invoice['amount'] = float(invoice['hours'] * invoice['rate'])
+
+        invoice['detail'].append(entry)
+        invoice = recalc(invoice)
         invoice['detail'] = sorted(invoice['detail'], key = lambda k: k['date'])
         db.invoice.replace_one({'_id': invoice_id}, invoice, True)
-        db.invoice.update({'_id': invoice_id}, { '$push': {'detail': entry}})
 
     return redirect(url_for('invoice_edit',invoice_id=invoice_id))
