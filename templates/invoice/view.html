@@ -154,8 +154,10 @@
         {% if action == 'view' %}
         <div class="mt-2 text-right">
             {% include '_flashmessages.html' %}
+            {% if invoice.status == 'closed' %}
+                <a class="btn btn-success" role="button" href="{{ url_for('invoice_view',invoice_id=invoice._id,action='print') }}">Print</a>
+            {% endif %}
             <a class="btn btn-primary" role="button" href="{{url_for('invoice_list')}}">Back to listing</a>
-            <a class="btn btn-success" role="button" href="{{ url_for('invoice_view',invoice_id=invoice._id,action='print') }}">Print</a>
         </div>
         {% endif %}
     </div>
