@@ -11,11 +11,9 @@ def recalc(invoice):
     invoice['hours'] = 0
     invoice['amount'] = 0
     for ts in invoice['detail']:
+        rate_id = db.clients.find_one({'_id': invoice['client']})['rate']
         invoice['hours'] += float(ts['hours'])
-    
-    if 'rate' not in invoice.keys():
-        rate = db.rates.find_one({'_id': invoice['client']})['rate']
-        invoice['rate'] = rate
+        invoice['rate'] = db.rates.find_one({'_id': int(rate_id)})['rate']
     
     invoice['amount'] = float(invoice['hours'] * invoice['rate'])
     return invoice
