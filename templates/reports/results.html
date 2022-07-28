@@ -13,6 +13,19 @@
     <div class="col-md-3 h4">To: {{ed}}</div>
 </div>
 
+{% if totals == 'none' %}
+<div class="row mt-4">
+    <div class="col-md-11 h2 text-center text-danger">
+        No items found
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-11 text-center">
+        <a class="h2" href="{{ url_for('get_report') }}"> << Go Back</a>
+    </div>
+</div>
+
+{% else %}
 <div class="row">
     <div class="col-md-1 font-weight-bold">Invoice#</div>
     <div class="col-md-1 font-weight-bold">Date</div>
@@ -72,5 +85,6 @@
         </div>
     </div>
 </form>
+{% endif %}
 
 {% endblock %}

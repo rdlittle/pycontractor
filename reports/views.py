@@ -36,7 +36,10 @@ def get_report():
                 ]
     
     invoices = db.invoice.aggregate(invoice_query)
-    totals = db.invoice.aggregate(summary_query).next()
+    try:
+        totals = db.invoice.aggregate(summary_query).next()
+    except StopIteration:
+        totals = 'none'
     
     return render_template('/reports/results.html', 
                            client_name=client_name, 
