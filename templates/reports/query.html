@@ -10,6 +10,15 @@
 
 <form action="{{ url_for('get_report') }}" method='POST'>
     <div class="row no-gutters">
+
+        <div class="col-md-6">
+            <select class="form-control" id="client_id" name="client_id">
+                {% for client in clients %}
+                    <option value={{ client._id }}>{{ client.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
         <div class="col-md-2">
             Start date:
             <input type="text" size="7" id="datepicker" name="start_date">

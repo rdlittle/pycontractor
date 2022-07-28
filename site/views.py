@@ -1,4 +1,4 @@
-from contractor import app, db, next_sequence
+from .. import app, db, next_sequence
 from flask import redirect, render_template, url_for, session, request
 import pdb
 from pymongo import ASCENDING

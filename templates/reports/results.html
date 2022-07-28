@@ -2,20 +2,24 @@
 
 {% block content %}
 
-<div class="row no-gutters">
-    <div class="col-md-11">
-        <h2>Search Results</h2>
+<div class="row mb-2">
+    <div class="col-md-1 h4">
+        Client:
     </div>
+    <div class="col-md-4 h4">
+        {{client_name}}
+    </div>
+    <div class="col-md-3 h4">From: {{sd}}</div>
+    <div class="col-md-3 h4">To: {{ed}}</div>
 </div>
 
 <div class="row">
     <div class="col-md-1 font-weight-bold">Invoice#</div>
     <div class="col-md-1 font-weight-bold">Date</div>
-    <div class="col-md-1 font-weight-bold">Client</div>
     <div class="col-md-1 font-weight-bold">Status</div>
     <div class="col-md-1 font-weight-bold">Sent</div>
     <div class="col-md-1 font-weight-bold">Check#</div>
-    <div class="col-md-2 font-weight-bold">Date Paid</div>
+    <div class="col-md-1 font-weight-bold">Paid</div>
     <div class="col-md-1 font-weight-bold text-right">Hours</div>
     <div class="col-md-1 font-weight-bold text-right">Amount</div>    
 </div>
@@ -33,9 +37,7 @@
             {{ item.date.strftime('%m/%d/%Y') }}
             {% endif %}
         </div>
-        <div class="col-md-1">
-            {{ '%2d'|format(item.client) }}
-        </div>
+
         <div class="col-md-1 text-center">
             {{ item.status }}
         </div>
@@ -45,7 +47,7 @@
         <div class="col-md-1">
             {{ item.check_number }}
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             {% if item.paid_date %}
             {{ item.paid_date.strftime('%m/%d/%Y') }}
             {% endif %}
@@ -59,7 +61,7 @@
     </div>
     {% endfor %}
     <div class="row no-gutters">
-        <div class="col-md-1 offset-7 font-weight-bold">
+        <div class="col-md-1 offset-5 font-weight-bold">
             Total
         </div>
         <div class="col-md-1 text-right font-weight-bold">
