@@ -7,14 +7,18 @@ import pdb
 @app.route('/report', methods=('GET', 'POST'))
 def get_report():
 
+    clients = db.clients.find()
     if request.method == 'GET':
-        clients = db.clients.find()
-        return render_template('/reports/query.html', clients=clients)
-
+        return render_template('/reports/query.html', clients=clients, error=False)
+    
     sd = request.form['start_date']
     ed = request.form['end_date']
-    start_date = datetime.strptime(sd, '%m/%d/%Y')
-    end_date = datetime.strptime(ed, '%m/%d/%Y')
+ 
+    try:
+        start_date = datetime.strptime(sd, '%m/%d/%Y')
+        end_date = datetime.strptime(ed, '%m/%d/%Y')
+    except ValueError:
+        return render_template('/reports/query.html', clients=clients, error=True)
     
     client_id = int(request.form['client_id'])
     client_name = db.clients.find_one({'_id': client_id})['name']
@@ -22,20 +26,23 @@ def get_report():
     ''' I have to do this in two steps until I learn the right way'''
     cl = {'client': {'$eq': client_id}}
     dr = {'paid_date': {'$gte': start_date, '$lte': end_date}}
+    sg = {'$group': {'_id': 'null', 'Amount': {'$sum': '$amount'}, 'Hours': {'$sum': '$hours'}}}
     aa = []
-    aa.append(dr)
     aa.append(cl)
+    aa.append(dr)
     bb = {'$and': aa}
     
     invoice_query = []
     invoice_query.append({'$match': bb})
     invoice_query.append({'$sort': {'paid_date': 1}})
     
-    summary_query = [{'$match':  {'paid_date': {'$gte': start_date, '$lt': end_date }}} , 
-                 {'$group':    {'_id': 'null',  'Amount': { '$sum': '$amount' },  'Hours': { '$sum': '$hours' } } } 
-                ]
+    summary_query = []
+    summary_query.append({'$match': bb})
+    summary_query.append(sg)
     
     invoices = db.invoice.aggregate(invoice_query)
+    tmp = [i for i in invoices]
+ 
     try:
         totals = db.invoice.aggregate(summary_query).next()
     except StopIteration:
@@ -43,6 +50,7 @@ def get_report():
     
     return render_template('/reports/results.html', 
                            client_name=client_name, 
+                           error=False,
                            sd = sd, 
                            ed = ed,
                            items=invoices, totals=totals)
