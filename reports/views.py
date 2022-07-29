@@ -13,10 +13,12 @@ def get_report():
     
     sd = request.form['start_date']
     ed = request.form['end_date']
- 
+    
     try:
         start_date = datetime.strptime(sd, '%m/%d/%Y')
         end_date = datetime.strptime(ed, '%m/%d/%Y')
+        if start_date > end_date:
+            return render_template('/reports/query.html', clients=clients, error=True)    
     except ValueError:
         return render_template('/reports/query.html', clients=clients, error=True)
     
