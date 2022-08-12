@@ -42,9 +42,8 @@ def get_report():
     summary_query.append({'$match': bb})
     summary_query.append(sg)
     
-    invoices = db.invoice.aggregate(invoice_query)
-    tmp = [i for i in invoices]
- 
+    invoices = [i for i in db.invoice.aggregate(invoice_query)]
+    
     try:
         totals = db.invoice.aggregate(summary_query).next()
     except StopIteration:
