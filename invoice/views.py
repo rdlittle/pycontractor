@@ -30,7 +30,7 @@ def invoice_list():
         client_id = request.args.get('client_id')
         filter = {'client': int(client_id)}
 
-    invoice_count = db.invoice.count(filter)
+    invoice_count = db.invoice.count_documents(filter)
     clients = db.clients.find()
     
     clist = {}
@@ -74,11 +74,14 @@ def invoice_post(invoice_id):
             invoice['check_number'] = request.form['check_number']
         return render_template('invoice/post.html', invoice_id=invoice_id, invoice=invoice)
 
-    invoice = db.invoice.find_one({'_id': invoice_id})
-    invoice['check_number'] = request.form['check_number']
-    invoice['status'] = 'paid'
-    invoice['paid_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
-    db.invoice.update({'_id': invoice_id}, invoice)
+    db.invoice.update_one({'_id': invoice_id},{'$set': 
+        {'check_number': request.form['check_number'],
+         'status': 'paid',
+         'paid_date': datetime.strptime(request.form['date'], '%m/%d/%Y')
+         }
+        }
+        )
+                           
     return redirect(url_for('invoice_list'))
 
 
@@ -94,10 +97,9 @@ def invoice_close(invoice_id):
             invoice['close_date'] = datetime.now()
         return render_template('invoice/close.html', invoice=invoice)
 
-    invoice = db.invoice.find_one({'_id': invoice_id})
-    invoice['status'] = 'closed'
-    invoice['close_date'] = datetime.strptime(request.form['date'], '%m/%d/%Y')
-    db.invoice.update({'_id': invoice_id}, invoice)
+    close_date = datetime.strptime(request.form['date'], '%m/%d/%Y')
+    db.invoice.update_one({'_id': invoice_id}, {'$set': 
+                          {'status': 'closed','close_date': close_date}})
     return redirect(url_for('invoice_list'))
 
 
@@ -106,10 +108,8 @@ def invoice_open(invoice_id):
     if 'cancel' in request.form:
         return redirect(url_for('invoice_list'))
 
-    invoice = db.invoice.find_one({'_id': invoice_id})
-    invoice['status'] = 'open'
-    invoice['close_date'] = ''
-    db.invoice.update({'_id': invoice_id}, invoice)
+    kv = {'status': 'open', 'close_date': ''}
+    db.invoice.update_one({'_id': invoice_id}, {'$set': kv})
     return redirect(url_for('invoice_edit', invoice_id=invoice_id))
 
 

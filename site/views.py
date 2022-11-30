@@ -26,7 +26,7 @@ def company_create():
         return redirect(url_for('company_list'))
 
     if 'delete' in request.form:
-        db.company.remove({'_id': int(request.form['id'])})
+        db.company.delete_one({'_id': int(request.form['id'])})
         return redirect(url_for('company_list'))
     
     company = {}
@@ -46,9 +46,9 @@ def company_create():
 
     if request.form['action'] == 'create':
         company['_id'] = next_sequence('company')    
-        db.company.insert(company)
+        db.company.insert_one(company)
     else:
-        db.company.update({'_id': int(request.form['id'])}, company)
+        db.company.update_one({'_id': int(request.form['id'])}, {'$set': company})
 
     return redirect(url_for('company_list'))
 
@@ -69,7 +69,7 @@ def company_edit(company_id):
     company['attn'] = request.form['attn']
     company['phone'] = request.form['phone']
     company['email'] = request.form['email']
-    db.company.update(company)
+    db.company.update_one({'$set': company})
     return redirect(url_for('company_list'))
 
 @app.route('/client_create', methods=['POST'])
@@ -89,7 +89,7 @@ def client_edit(client_id=None):
     client_id = int(client_id)
     
     if 'delete' in request.form:
-        db.clients.remove({'_id': client_id})
+        db.clients.delete_one({'_id': client_id})
         return redirect(url_for('client_list'))
 
     if request.method == 'GET':
@@ -118,7 +118,7 @@ def client_edit(client_id=None):
     cust['prefix'] = request.form['prefix']
 
     if is_new:
-        db.clients.insert(cust)
+        db.clients.insert_one(cust)
     else:
         db.clients.update_one({'_id': client_id}, {'$set': cust})
 
