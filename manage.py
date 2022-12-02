@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import flask_script
 from flask_script import Manager, Server
-from ..contractor import app
+from contractor import app
 
 manager = Manager(app)
 manager.add_command("runserver", Server(

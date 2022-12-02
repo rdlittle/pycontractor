@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=600, initial-scale=1">
+    <!-- Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <div class="container-sm border border-dark font-weight-bold p-5" 
+    style="font-family: serif; width: 8.5in; margin-left: 2em;">
+        <div class="row">
+            <div class="col position-relative w-100 top-0 start-50 translate-middle">
+                <div class="h1 text-center">Execu-Sys, Ltd.</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col position-relative w-100 top-0 start-50 translate-middle">
+                <div class="h5 text-center">1350 BROADWAY, SUITE 1711, NEW YORK, NY 10018 (212) 967-0505 Fax: (212) 768-2890</div>
+            </div>
+        </div>
+        <div class="row mt-4 mb-5">
+            <div class="col position-relative w-100 top-0 start-50 translate-middle">
+                <div class="h5 text-center font-weight-bold">TIME SHEET</div>
+            </div>
+        </div>
+        <table class="border-0" style="width: 45%;">
+            <tr>
+                <td class="font-weight-bold">Consultant</td>
+                <td>Robert Little / Webfront Development</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">Period</td>
+                <td>11/16/2022 - 11/30/2022</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">Client</td>
+                <td>Vertafore</td>
+            </tr>
+            <tr>
+                <td class="font-weight-bold">Project</td>
+                <td>Conversion</td>
+            </tr>
+        </table>
+        
+        <div class="row mt-5">
+            <div class="col-2">MO/DAY</div>
+            <div class="col-2">Task</div>
+            <div class="col-2">Hours Worked</div>
+        
+            <div class="col-2">MO/DAY</div>
+            <div class="col-2">Task</div>
+            <div class="col-2">Hours Worked</div>
+        </div>
+
+        {% for n in range(0,7) %}
+        <div class="row mt-2">
+            <div class="col-2">{{ invoice.detail[n].date }}</div>
+            <div class="col-2">{{ invoice.detail[n].task }}</div>
+            <div class="col-2">{{ invoice.detail[n].hours }}</div>
+
+            <div class="col-2">{{ invoice.detail[n+7].date }}</div>
+            <div class="col-2">{{ invoice.detail[n+7].task }}</div>
+            <div class="col-2">{{ invoice.detail[n+7].hours }}</div>
+        </div>
+
+        {% endfor %}
+        
+        <div class="row mt-4 mb-5">
+            <div class="col position-relative top-0 start-50 translate-middle">
+                <div class="h5 text-center font-weight-bold">TOTAL HOURS WORKED&nbsp;&nbsp;{{ invoice['hours'] }}</div>
+            </div>
+        </div> 
+        
+        <div class="row mt-5 mb-5">
+            <table style="width: 45%;">
+                <tr>
+                    <td class="align-bottom pb-2">Consultant signature</td>
+                    <td class="border-bottom border-4 border-dark pl-5 pb-2">
+                        <img id="image" style="width: 50%; height: 50%;" 
+                        src= {% include 'signature2-base64.txt' %} />
+                    </td>
+                <tr>
+                    <td>Client approval of hours worked</td>
+                    <td class="border-bottom border-4 border-dark"></td>
+                </tr>
+            </table>
+        </div>
+        
+        {% if action == 'view' %}
+            <a class="btn btn-success" role="button" 
+            href="{{ url_for('view_timesheet',invoice_id=invoice._id,action='print') }}">Print</a>
+        {% endif %}
+</div>
+</body>

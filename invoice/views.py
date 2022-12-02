@@ -162,14 +162,15 @@ def invoice_create():
 
 @app.route('/invoice_view/<int:invoice_id>', methods=['GET'])
 def invoice_view(invoice_id):
-    import pdb
-    
+    # import pdb
+    # pdb.set_trace()
     today = datetime.now().strftime('%m/%d/%Y')
     invoice = db.invoice.find_one({'_id': invoice_id})
     client_rec = db.clients.find_one({'_id': invoice['client']})
     company = db.company.find_one({'_id': 1})
     rate = db.rates.find_one({'_id': int(client_rec['rate'])})
-    invoice['rate'] = rate['rate']
+    if invoice['rate'] == '':
+        invoice['rate'] = rate['rate']
 
     action = request.args['action']
 
@@ -207,6 +208,7 @@ def invoice_view(invoice_id):
         file_name = '{}-{}-{}.pdf'.format(client_rec['prefix'], inv_date, str(invoice['_id']))
         _invoice = render_template('invoice/view.html', invoice=invoice,
                                    date=today, company=company, client=client_rec, action=action)
+        
         _sheet = pdfkit.from_string(_invoice, False, options=options)
         response = make_response(_sheet)
         response.headers['Content-type'] = 'application/pdf'

@@ -1,6 +1,7 @@
 from .. import app, client, db
 from datetime import datetime
-from flask import flash, redirect, render_template, url_for, request
+from flask import flash, redirect, render_template, url_for, request, make_response
+import pdfkit
 import pdb
 
 
@@ -55,3 +56,67 @@ def get_report():
                            sd = sd, 
                            ed = ed,
                            items=invoices, totals=totals)
+
+
+@app.route('/timesheet/<int:invoice_id>', methods=['GET'])
+def view_timesheet(invoice_id):
+
+        invoice_rec = db.invoice.find_one({'_id': invoice_id})
+        
+        
+        invoice_rec['detail'] = sorted(invoice_rec['detail'], key = lambda k: k['date'])
+        
+        inv_date = datetime.strftime(invoice_rec['date'], '%m%d%Y')
+        start_date = datetime.strftime(invoice_rec['date'], '%m/%d/%Y')
+        end_date = datetime.strftime(invoice_rec['close_date'], '%m/%d/%Y')
+        
+        invoice_rec['date'] = start_date
+        invoice_rec['close_date'] = end_date
+                
+        client_rec = db.clients.find_one({'_id': invoice_rec['client']})
+        
+        form_name = client_rec['timesheet_form']
+        
+        action = request.args['action']
+        
+        # convert the detail dates to a string and format hours to 2 decimal places
+        for day,detail in enumerate(invoice_rec['detail']):
+            work_date = datetime.strftime(invoice_rec['detail'][day]['date'],'%m/%d/%Y')
+            invoice_rec['detail'][day]['date'] = work_date
+            
+            dd = float(invoice_rec['detail'][day]['hours'])
+            
+            if invoice_rec['detail'][day]['hours']:
+                try:
+                    hrs = "{:.2f}".format(dd)
+                except:
+                    pdb.set_trace()
+
+                invoice_rec['detail'][day]['hours'] = hrs
+            invoice_rec['detail'][day]['task'] = 'Conversion'
+                
+        # pad the detail out to 14 days 
+        for day in range(len(invoice_rec['detail']), 14):
+            invoice_rec['detail'].append({'date': '', 'description': '', 'hours': '', 'task': ''})
+            
+        
+        if action=='view':
+            return render_template('reports/'+form_name,invoice=invoice_rec,action='view')
+    
+        options = {
+            'page-size': 'Letter',
+            'margin-left': '0.75in',
+            'margin-right': '0.75in',
+            'margin-top': '0.75in',
+            'margin-bottom': '0.75in'
+        }
+        
+        file_name = '{}-{}-timesheet.pdf'.format(client_rec['prefix'], inv_date)
+        _invoice = render_template('/reports/'+form_name, invoice=invoice_rec, action='print')
+                                   
+        _sheet = pdfkit.from_string(_invoice, False, options=options)
+        response = make_response(_sheet)
+        response.headers['Content-type'] = 'application/pdf'
+        response.headers['Content-disposition'] = 'inline; filename='+file_name
+        return response
+        
