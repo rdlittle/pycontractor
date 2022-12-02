@@ -61,6 +61,7 @@ def get_report():
 @app.route('/timesheet/<int:invoice_id>', methods=['GET'])
 def view_timesheet(invoice_id):
 
+        company_rec = db.company.find_one({'_id': 1})
         invoice_rec = db.invoice.find_one({'_id': invoice_id})
         
         
@@ -111,7 +112,9 @@ def view_timesheet(invoice_id):
             'margin-bottom': '0.75in'
         }
         
-        file_name = '{}-{}-timesheet.pdf'.format(client_rec['prefix'], inv_date)
+        entity_name = company_rec['attn'].replace(' ','_')
+        
+        file_name = '{}_Timesheet_{}.pdf'.format(entity_name, inv_date)
         _invoice = render_template('/reports/'+form_name, invoice=invoice_rec, action='print')
                                    
         _sheet = pdfkit.from_string(_invoice, False, options=options)
