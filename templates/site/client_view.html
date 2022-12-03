@@ -49,9 +49,13 @@
 
         <div class="row no-gutters mb-2">
             <div class="col-md-2">Phone</div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input type="text" name="phone" value="{{ form.phone }}" style="width: 100%;">
             </div>
+            <div class="col-md-2 text-right mr-2">Fax</div>
+            <div class="col-md-3">
+                <input type="text" name="fax" value="{{ form.phone }}" style="width: 100%;">
+            </div>            
         </div>
 
         <div class="row no-gutters mb-2">
@@ -70,6 +74,20 @@
             <div class="col-md-2">
                 <input type="text" name="prefix" value="{{ form.prefix }}" style="width: 100%;">
             </div>            
+        </div>
+
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">Timesheet Form</div>
+            <div class="col-md-6">
+                <input type="text" name="timesheet_form" value="{{ client.timesheet_form }}" style="width: 50%;">
+            </div>
+        </div>
+
+        <div class="row no-gutters mb-2">
+            <div class="col-md-2">Project</div>
+            <div class="col-md-6">
+                <input type="text" name="project" value="{{ client.project }}" style="width: 50%;">
+            </div>
         </div>
 
         <div class="row no-gutters mt-2">

@@ -13,5 +13,8 @@ class ContactForm(FlaskForm):
     zip_code = StringField('Zip')
     attn = StringField('Attention')
     phone = StringField('Phone')
+    fax = StringField('Fax')
     email = StringField('email')
     prefix = StringField('prefix')
+    timesheet_form = StringField('timesheet_form')
+    project = StringField('project')

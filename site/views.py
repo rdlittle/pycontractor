@@ -116,6 +116,9 @@ def client_edit(client_id=None):
     cust['email'] = request.form['email']
     cust['rate'] = request.form['rate']
     cust['prefix'] = request.form['prefix']
+    cust['fax'] = request.form['fax']
+    cust['timesheet_form'] = request.form['timesheet_form']
+    cust['project'] = request.form['project']
 
     if is_new:
         db.clients.insert_one(cust)
@@ -139,6 +142,9 @@ def client_view(client_id):
     form['email'] = cl.email
     form['attn'] = cl.attn
     form['prefix'] = cl.prefix
+    form['fax'] = cl.fax
+    form['timesheet_form'] = cl.timesheet_form
+    form['project'] = cl.project
     return render_template('site/client_view.html', headline="Client View", form=form)
 
 @app.route('/client_list')
