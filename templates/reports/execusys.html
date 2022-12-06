@@ -28,19 +28,19 @@
         </div>
         <table class="border-0" style="width: 45%;">
             <tr>
-                <td class="font-weight-bold">Consultant</td>
+                <td class="font-weight-bold">Consultant:</td>
                 <td>Robert Little / Webfront Development</td>
             </tr>
             <tr>
-                <td class="font-weight-bold">Period</td>
-                <td>11/16/2022 - 11/30/2022</td>
+                <td class="font-weight-bold">Period:</td>
+                <td>{{ invoice['date'] + ' - ' +invoice['close_date'] }}</td>
             </tr>
             <tr>
-                <td class="font-weight-bold">Client</td>
+                <td class="font-weight-bold">Client:</td>
                 <td>Vertafore</td>
             </tr>
             <tr>
-                <td class="font-weight-bold">Project</td>
+                <td class="font-weight-bold">Project:</td>
                 <td>Conversion</td>
             </tr>
         </table>
@@ -75,16 +75,16 @@
         </div> 
         
         <div class="row mt-5 mb-5">
-            <table style="width: 45%;">
+            <table style="width: 50%;">
                 <tr>
                     <td class="align-bottom pb-2">Consultant signature</td>
                     <td class="border-bottom border-4 border-dark pl-5 pb-2">
-                        <img id="image" style="width: 50%; height: 50%;" 
+                        <img id="image" style="width: 60%; height: 50%;" 
                         src= {% include 'signature2-base64.txt' %} />
                     </td>
                 <tr>
                     <td>Client approval of hours worked</td>
-                    <td class="border-bottom border-4 border-dark"></td>
+                    <td class="mt-4 border-bottom border-4 border-dark"></td>
                 </tr>
             </table>
         </div>
