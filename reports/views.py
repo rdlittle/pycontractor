@@ -3,6 +3,7 @@ from datetime import datetime
 from flask import flash, redirect, render_template, url_for, request, make_response
 import pdfkit
 import pdb
+import os
 
 
 @app.route('/report', methods=('GET', 'POST'))
@@ -115,9 +116,10 @@ def view_timesheet(invoice_id):
         entity_name = company_rec['attn'].replace(' ','_')
         
         file_name = '{}_Timesheet_{}.pdf'.format(entity_name, inv_date)
+        css_name = os.path.dirname(os.path.abspath(__file__)) + '/../templates/reports/execusys.css'
         _invoice = render_template('/reports/'+form_name, invoice=invoice_rec, action='print')
                                    
-        _sheet = pdfkit.from_string(_invoice, False, options=options)
+        _sheet = pdfkit.from_string(_invoice, False, css=css_name, options=options)
         response = make_response(_sheet)
         response.headers['Content-type'] = 'application/pdf'
         response.headers['Content-disposition'] = 'inline; filename='+file_name
