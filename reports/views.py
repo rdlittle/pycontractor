@@ -70,7 +70,7 @@ def view_timesheet(invoice_id):
         
         inv_date = datetime.strftime(invoice_rec['date'], '%m%d%Y')
         start_date = datetime.strftime(invoice_rec['date'], '%m/%d/%Y')
-        end_date = datetime.strftime(invoice_rec['close_date'], '%m/%d/%Y')
+        end_date = datetime.strftime(invoice_rec['close_date'], '%m%d%Y')
         
         invoice_rec['date'] = start_date
         invoice_rec['close_date'] = end_date
@@ -115,7 +115,7 @@ def view_timesheet(invoice_id):
         
         entity_name = company_rec['attn'].replace(' ','_')
         
-        file_name = '{}_Timesheet_{}.pdf'.format(entity_name, inv_date)
+        file_name = '{}_Timesheet_{}.pdf'.format(entity_name, end_date)
         css_name = form_name.partition('.')[0]+'.css'
         css_path = os.path.dirname(os.path.abspath(__file__)) + '/../templates/reports/'+css_name
         _invoice = render_template('/reports/'+form_name, invoice=invoice_rec, action='print')
