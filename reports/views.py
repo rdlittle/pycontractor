@@ -70,7 +70,7 @@ def view_timesheet(invoice_id):
         
         inv_date = datetime.strftime(invoice_rec['date'], '%m%d%Y')
         start_date = datetime.strftime(invoice_rec['date'], '%m/%d/%Y')
-        end_date = datetime.strftime(invoice_rec['close_date'], '%m%d%Y')
+        end_date = datetime.strftime(invoice_rec['close_date'], '%m/%d/%Y')
         
         invoice_rec['date'] = start_date
         invoice_rec['close_date'] = end_date
