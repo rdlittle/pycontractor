@@ -41,7 +41,7 @@ def invoice_list():
     page_count = int(invoice_count / page_size)
     
     items = db.invoice.find(filter).skip(
-        (page_number - 1) * page_size).limit(page_size).sort('date', DESCENDING)
+        (page_number - 1) * page_size).limit(page_size).sort('_id', DESCENDING)
     return render_template('/invoice/list.html', items=items, clients=clist,
                            item_count=invoice_count, page_number=page_number, 
                            page_size=page_size, page_count=page_count)
@@ -125,7 +125,7 @@ def invoice_edit(invoice_id):
     """
     invoice = db.invoice.find_one({'_id': invoice_id})
     invoice['detail'] = sorted(invoice['detail'], key = lambda k: k['date'])
-    return render_template('/invoice/edit.html', invoice=invoice)
+    return render_template('/invoice/edit.html', invoice=invoice,cl=client)
 
 
 @app.route('/invoice_create', methods=('GET', 'POST'))
