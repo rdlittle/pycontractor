@@ -104,7 +104,7 @@ def view_timesheet(invoice_id):
             
         
         if action=='view':
-            return render_template('reports/'+form_name,invoice=invoice_rec,action='view')
+            return render_template('reports/'+form_name,invoice=invoice_rec,c=client_rec,action='view')
     
         options = {
             'page-size': 'Letter',
@@ -119,7 +119,7 @@ def view_timesheet(invoice_id):
         file_name = '{}_Timesheet_{}.pdf'.format(entity_name, file_name_end_date)
         css_name = form_name.partition('.')[0]+'.css'
         css_path = os.path.dirname(os.path.abspath(__file__)) + '/../templates/reports/'+css_name
-        _invoice = render_template('/reports/'+form_name, invoice=invoice_rec, action='print')
+        _invoice = render_template('/reports/'+form_name, invoice=invoice_rec, c=client_rec, action='print')
                                    
         _sheet = pdfkit.from_string(_invoice, False, css=css_path, options=options)
         response = make_response(_sheet)
