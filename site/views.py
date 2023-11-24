@@ -118,6 +118,7 @@ def client_edit(client_id=None):
     cust['prefix'] = request.form['prefix']
     cust['fax'] = request.form['fax']
     cust['timesheet_form'] = request.form['timesheet_form']
+    cust['customer'] = request.form['customer']
     cust['project'] = request.form['project']
 
     if is_new:
