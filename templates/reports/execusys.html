@@ -37,11 +37,11 @@
             </tr>
             <tr>
                 <td class="font-weight-bold">Client:</td>
-                <td>Vertafore</td>
+                <td>{{ c['customer'] }}</td>
             </tr>
             <tr>
                 <td class="font-weight-bold">Project:</td>
-                <td>Conversion</td>
+                <td>{{ c['project'] }}</td>
             </tr>
         </table>
         
@@ -58,11 +58,11 @@
         {% for n in range(0,7) %}
         <div class="row mt-2">
             <div class="col-2">{{ invoice.detail[n].date }}</div>
-            <div class="col-2">{{ invoice.detail[n].task }}</div>
+            <div class="col-2">{{ invoice.detail[n].description }}</div>
             <div class="col-2">{{ invoice.detail[n].hours }}</div>
 
             <div class="col-2">{{ invoice.detail[n+7].date }}</div>
-            <div class="col-2">{{ invoice.detail[n+7].task }}</div>
+            <div class="col-2">{{ invoice.detail[n+7].description }}</div>
             <div class="col-2">{{ invoice.detail[n+7].hours }}</div>
         </div>
 
